@@ -1,0 +1,32 @@
+---
+title: "Análise de público"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Amostra Populacional
+## TÍTULO 2
+### TÍTULO 3
+#### TÍTULO 4
+
+*ITÁLICO*
+**NEGRITO**
+
+TEXTO NORMAL
+
+## PARA PRINTAR GRÁFICOS 
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+# ORDERNAR INFORMAÇÕES
+- Um
+- Dois
+- Três
+
+# ORDENAR NUMERICAMENTE
+1. Um
+2. Dois
+3. Três

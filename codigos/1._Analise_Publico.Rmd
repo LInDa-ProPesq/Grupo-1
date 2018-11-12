@@ -67,3 +67,13 @@ pie(dados,labels = legenda, col=cor(qtd),
 
 ## Sobre a amostra
 
+
+# ORDERNAR INFORMAÇÕES
+- Um
+- Dois
+- Três
+
+# ORDENAR NUMERICAMENTE
+1. Um
+2. Dois
+3. Três
