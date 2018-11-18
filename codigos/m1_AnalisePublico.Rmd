@@ -1,0 +1,167 @@
+
+---
+title: <center>"Análise de público"</center>
+author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinicius Camargo"
+output: pdf_document
+mainfont: Arial
+sansfont: Arial
+fig_crop: false
+toc: true
+fontsize: 14pt
+geometry: margin=0.5in
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
+
+---
+
+\pagebreak
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
+path <- paste(path, "/dados/structured_csv.csv", sep = "")
+install.packages("readxl", repos = "http://cran.us.r-project.org")
+install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+library("reshape2")
+library("RColorBrewer")
+library("readxl")
+library("csvread")
+data <- read.csv(path, header = TRUE)
+
+cor <- function(numero_dados) {
+  d=brewer.pal(n = numero_dados, name = "RdBu")
+  return(d)
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE, cache=FALSE, echo=FALSE}
+library(rmarkdown)
+```
+
+# Introdução
+
+Segundo Fawcett e Waller, "a ciência de dados é a aplicação de métodos quantitativos e qualitativos para resolver problemas relevantes e prever resultados. Uma das principais revelações de hoje, com a vasta e crescente quantidade de dados, é que o conhecimento e a análise do domínio não podem ser separados".
+
+Tendo em vista, o crescimento assíduo de tal temática, procuramos aplicar alguns conceitos da definição. Para tanto, Nosso projeto foi baseado na análise populacional coletada pelos alunos da turma de Ciência de Dados no segundo semestre de 2018. O objetivo principal do trabalho era responder a questão: *Quais são as influências das mídias sociais sobre discentes da instituição de nível superior UNESP-Bauru-SP?*
+
+No decorrer do processo, coletamos, tratamos e, por fim, apresentaremos algumas análises e conclusões sobre os dados coletados.
+
+## ANÁLISE POPULACIONAL
+
+Os dados foram coletados pelos alunos da turma. O projeto contou com a coleta de dados sobre **61 pessoas**. 
+
+### Sobre o Gênero
+
+```{r, echo=FALSE, warning=FALSE}
+#atribuindo os valores da coluna genero
+coluna_genero <- data$'genero'
+
+# Dicionário de dados
+  # Não informado = 1
+  # Masculino = 2
+  # Feminino = 3
+
+nao_informado <- sum(coluna_genero == '1')
+masculino <- sum(coluna_genero == '2')
+feminino <- sum(coluna_genero == '3')
+total <- masculino + feminino + nao_informado
+
+dados <- c(nao_informado, masculino, feminino)
+legenda <- c("Não Informado", "Masculino", "Feminino")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, fig.align='center', echo=FALSE}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="Gênero Público")
+```
+Como podemos ver, a amostra é composta majoritariamente por homens. Dessa maneira, tivemos 37 homens e 24 mulheres. Nenhum participante assinalou assinalou como "Não quero informar".
+
+### Sobre a idade
+
+Dentro da pesquisa, a resposta sobre idade foi dividida em classes. Sendo: 
+- A: Entre 16 e 20 anos
+- B: Entre 21 e 25 anos
+- C: Entre 26 e 30 anos
+- D: Entre 30 e 35 anos
+- E: Entre 36 e 40 anos
+- F: Acima de 40 anos
+
+```{r, echo=FALSE, warning=FALSE}
+coluna_idade <- data$'idade'
+i16_20 <- sum(coluna_idade == '1')
+i21_25 <- sum(coluna_idade == '2')
+i26_30 <- sum(coluna_idade == '3')
+i30_35 <- sum(coluna_idade == '4')
+i36_40 <- sum(coluna_idade == '5')
+i41 <- sum(coluna_idade == '6')
+dados_idade <- c(i16_20, i21_25, i26_30, i30_35, i36_40, i41)
+#Gráfico de barras
+g1 <- "Entre 16 e 20 anos:"
+g2 <- "Entre 21 e 25 anos:"
+g3 <- "Entre 26 e 30 anos:"
+g4 <- "Entre 30 e 35 anos:"
+g5 <- "Entre 36 e 40 anos:"
+g6 <- "Acima de 40 anos:"
+legenda_idade <- c(g1, g2, g3, g4, g5, g6)
+qtd <- length(legenda_idade)
+legenda_idade <- paste(legenda_idade, dados_idade, "pessoas")
+```
+
+```{r, fig.align='center', echo=FALSE}
+barplot(dados_idade, legend=legenda_idade, main="Idade Público", 
+        xlab="Idade",col=cor(qtd),
+        ylim = c(0, 1.5* max(dados_idade, na.rm = T)))
+```
+
+Como podemos ver no gráfico, existem dois grandes grupos de idade. Aproximadamente, 95% das pessoas consultadas estão entre 16 e 25 anos, ou seja, nasceram entre 1993 e o início dos anos 2000. Isso é importante para pesquisa, pois a geração em análise nasceu no período de maior crescimento dos dispositivos computacionais de informação, seja com o surgimentos do smartphones, a proliferação do uso de computadores pessoais e o crescimento das redes sociais.
+
+Logo, será importante analisar a maneira a qual esse grupo em análise utiliza as redes sociais, pois é uma das gerações que mais teve acesso a esses dispositivos.
+
+### Sobre remuneração
+
+Dentro da pesquisa também, consultamos sobre os vínculos empregatícios e ocupações profissionais das pessoas.
+
+```{r, echo=FALSE, warning=FALSE}
+coluna_trab <- data$'trabalha'
+des <- sum(coluna_trab == '1')
+jorn_p <- sum(coluna_trab == '2')
+jorn_i <- sum(coluna_trab == '3')
+estag <- sum(coluna_trab == '4')
+conta_pro <- sum(coluna_trab == '5')
+temp_afas <- sum(coluna_trab == '6')
+aposent <- sum(coluna_trab == '7')
+bolsi <- sum(coluna_trab == '8')
+dados_trab <- c(des, jorn_p, jorn_i, estag, bolsi)
+
+total_empregados <- jorn_p + jorn_i + estag + conta_pro + bolsi
+p <- total_empregados/(total_empregados + des)
+#Gráfico de barras
+g1 <- "Desempregado:"
+g2 <- "Jornada parcial:"
+g3 <- "Jornada integral:"
+g4 <- "Estagiário:"
+g8 <- "Bolsista Capes:"
+legenda_trab <- c(g1, g2, g3, g4, g8)
+qtd <- length(legenda_trab)
+```
+
+```{r, fig.align='center', echo=FALSE}
+pct <- round(dados_trab/sum(dados_trab)*100)
+legenda_trab <- paste(legenda_trab, pct)
+legenda_trab <- paste(legenda_trab,"%",sep="")
+pie(dados_trab,labels = legenda_trab, col=cor(qtd),
+    main="Ocupações")
+```
+
+Podemos constatar que as pessoas com vínculos remunerados totalizam 37 e, em contrapartida, 24 estão desempregadas. Interessante analisar que 60,65% dos entrevistados possuem remuneração.
+
+### Estado Civil e Descendentes
+A pesquisa também procurou compreender o estado civil e se o público possuía filhos ou não. Dentro das análises, podemos perceber que apenas *uma das pessoas entrevistadas estava casada* e apenas *uma pessoa possui um filho*. Todo o restante encontrasse solteiro e sem filhos.
