@@ -14,6 +14,8 @@ cor <- function(numero_dados) {
 data <- read_excel("dados/umses_graduacao_2018_vtidy.xlsx")
 
 
+#abre arquivo pdf para poder salvar o gráfico
+pdf("graficos/uso_geral_plataformas.pdf")
 
 #GRÁFICO DE USO DAS PLATAFORMAS
 coluna_facebook <- sum(data$facebook)
@@ -49,47 +51,60 @@ barplot(dados, main="Uso de plataformas de Redes Sociais", col = rainbow(20), ho
         las=1,
         names.arg=legenda)
 
+#fecha pdf
+dev.off()
+
 
 #PERGUNTA 3 - TEMPO DE USO DAS REDES SOCIAIS
 
 tabela <- table(data$tempogasto)
 slices <- c(tabela)
-lbls <- c("Nenhum/Não uso -", "5 a 10 min -", "10 a 30 min -", "30 a 1 hora -",
+lbls <- c("Nenhum/Não uso -", "5 a 10 min -", "10 a 30 min -", "30 min a 1 hora -",
           "1 a 2 horas -","2 a 3 horas -","3 a 4 horas -","4 a 5 horas -","mais de 5 horas -");
 
 pct <- round(slices/sum(slices)*100)
 lbls <- paste(lbls, pct) # add percents to labels 
 lbls <- paste(lbls,"%",sep="") # ad % to labels 
+
+pdf("graficos/perg3_tempo_uso_redes.pdf")
+
 pie(slices,labels = lbls, col=rainbow(length(lbls)),
     main="Tempo de uso das mídias sociais por dia", radius = 1, init.angle = 0, border = 1)
+
+#fecha pdf
+dev.off()
 
 #PERGUNTA 4 - MIDIA SOCIAL DEVE SER USADA POR PORFS?
 tabela <- table(data$usoacademico)
 counts <- c(tabela)
 lbls <- c("Não","Sim", "Sim, porém com restrições", "Não sei / Não tenho opinião")
 
+pdf("graficos/perg4_midia_usada_prof.pdf")
 barplot(counts, main="Mídia social é uma ferramenta que pode/deve ser utilizada pelos professores?", space=1,
         xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(15))
 
-
+dev.off()
 
 #PERGUNTA 5 - MELHOR FORMA DE APROXIMAR PROFS E ALUNOS?
 tabela <- table(data$profchegaal)
 counts <- c(tabela)
 lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
-
+pdf("graficos/perg5_aproximar_profs.pdf")
 barplot(counts, main="A mídia social é a melhor forma dos professores se aproximarem de seus
 alunos?", space=1,, ylim=c(0,30),
         xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(8))
+dev.off()
 
 #PERGUNTA 6 - MELHORES RESULTADOS SE USARMOS REDES SOCIAIS?
 tabela <- table(data$melhoraresul)
 counts <- c(tabela)
 lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
-
+pdf("graficos/perg6_melhoresresultados.pdf")
 barplot(counts, main="Os alunos alcançarão melhores resultados se as mídias sociais estiverem
 integradas às aulas e/ou atividades?", space=1,, ylim=c(0,50),
         xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(7))
+
+dev.off()
 
 #INSIGHT - QUAL A REDE SOCIAL MAIS USADA PELOS ENTREVISTADOS QUE APOIAM INTEGRAÇÃO DE REDES PARA MELHOR DESEMPENHO
 
@@ -140,9 +155,13 @@ legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagra
 qtd <- length(legenda)
 pct <- round(dados/sum(dados)*100)
 
+pdf("graficos/redes_socais_uso_apenas_melhores_result.pdf")
+
 barplot(dados, main="Plataformas mais usadas por aqueles que consideram\n que terão melhores resultados com a integração de mídias sociais com aulas/atividades", col = rainbow(30), horiz=TRUE,
         width = 500, xlim = c(0,40),cex.names=0.8,
         xlab="Qtde de usuários por plataforma",
         las=1,
         names.arg=legenda, space=1)
+
+dev.off()
 

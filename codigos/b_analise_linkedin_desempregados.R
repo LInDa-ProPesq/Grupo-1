@@ -12,10 +12,11 @@ cor <- function(numero_dados) {
 
 #usando xls
 data <- read_excel("dados/umses_graduacao_2018_vtidy.xlsx")
+
 data$ID <- seq.int(nrow(data))
 agrupa <- as.data.frame(list(data$ID, data))
 names(agrupa)[1] <- "ID"
-write.csv(agrupa, "dados/structured_csv.csv",row.names=FALSE)
+write.csv(agrupa, "/home/matheus-lopes/Documentos/UNESP 2018/2 SEM/CIÊNCIA DE DADOS/Grupo-1/dados/structured_csv.csv",row.names=FALSE)
 
 #atribuindo os valores da coluna genero
 coluna_linkedin <- data$'linkedin'

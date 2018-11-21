@@ -1,0 +1,188 @@
+---
+title: "markdown_matheus"
+output: pdf_document
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+setwd('/home/matheus-lopes/Documentos/UNESP 2018/2 SEM/CIÊNCIA DE DADOS/Grupo-1')
+path <- "/home/matheus-lopes/Documentos/UNESP 2018/2 SEM/CIÊNCIA DE DADOS/Grupo-1"
+path <- paste(path, "/dados/structured_csv.csv", sep = "")
+install.packages("readxl", repos = "http://cran.us.r-project.org")
+install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+library("readxl")
+
+#usando xls
+data <- read_excel("dados/umses_graduacao_2018_vtidy.xlsx")
+
+cor <- function(numero_dados) {
+  d=brewer.pal(n = numero_dados, name = "RdBu")
+  return(d)
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+### Nível de utilização geral de cada mídia social
+
+A partir da formatação dos dados obtidos pelo questionário, conseguimos identificar quais as mídias sociais mais utilizadas pelos entrevistados e quais estão em maior desuso.
+Como está exposto no gráfico abaixo, as 3 mídias sociais mais utilizadas em ordem decrescente são: WhatsApp, YouTube e Facebook.
+
+Já as 3 mídias sociais menos utilizadas são: Tumblr, Snapchat e Pinterest.
+
+Interessante salientar que as mídias sociais informadas através da opção "Outras" foram: Telegram, Moodle, Steam, Skype, Messenger, GitHub, Slack e StackOverFlow. 
+
+```{r, echo=FALSE, warning=FALSE}
+
+
+#GRÁFICO DE USO DAS PLATAFORMAS
+coluna_facebook <- sum(data$facebook)
+coluna_twitter <- sum(data$twitter)
+coluna_whatsapp <- sum(data$whatsapp)
+coluna_linkedin <- sum(data$linkedin)
+coluna_youtube <- sum(data$youtube)
+coluna_instagram <- sum(data$instagram)
+coluna_snapchat <- sum(data$snapchat)
+coluna_tumblr <- sum(data$tumblr)
+coluna_pinterest <- sum(data$pinterest)
+outras_plataf <- 0
+for (i in data$outras_plataformas){
+  if(!is.na(i)){
+    outras_plataf <- outras_plataf+1
+  }
+}
+
+coluna_outras <- outras_plataf
+
+#formatando para criar gráfico
+dados <- c(coluna_facebook, coluna_twitter, coluna_whatsapp, coluna_linkedin, coluna_youtube, 
+           coluna_instagram, coluna_snapchat, coluna_tumblr, coluna_pinterest, coluna_outras)
+
+legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagram", "Snapchat", "Tumblr", "Pinterest", "Outras")
+
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+
+```
+
+
+```{r, echo=FALSE}
+barplot(dados, main="Uso de plataformas de Redes Sociais", col = rainbow(20), horiz=TRUE,
+        width = 500, xlim = c(0,70),cex.names=0.8,
+        xlab="Qtde de entrevistados que são usuários",
+        las=1,
+        names.arg=legenda)
+```
+
+Desta forma, caso necessário realizar o compartilhamento de materiais, por exemplo, entre docentes e discentes através de midias sociais indica-se o compartilhamento de links em grupos de WhatsApp ou criação e divulgação de vídeos pelos chamados canais da plataforma YouTube.
+
+
+### Tempo de uso das mídias sociais por dia
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$tempogasto)
+slices <- c(tabela)
+lbls <- c("Nenhum/Não uso -", "5 a 10 min -", "10 a 30 min -", "30 min a 1 hora -",
+          "1 a 2 horas -","2 a 3 horas -","3 a 4 horas -","4 a 5 horas -","mais de 5 horas -");
+
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+```
+
+```{r, echo=FALSE}
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+    main="Tempo de uso das mídias sociais por dia", radius = 1, init.angle = 0, border = 1)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+```
+
+```{r, echo=FALSE}
+```
+
+###Opinião dos entrevistados sobre o uso de mídias sociais por professores
+Através da pergunta número 4 do formulário obteu-se a aceitação sobre do uso de redes sociais pelos professores do Ensino Superior.
+Veja no gráfico abaixo o compilado das respostas obtidas.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$usoacademico)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Sim, porém com \nrestrições", "Não sei /\n Não tenho opinião") 
+```
+
+```{r echo=FALSE}
+barplot(counts, main="Mídia social é uma ferramenta que \npode/deve ser utilizada pelos professores?", space=1, ylim=c(0,40),
+        xlab="Opinião dos entrevistados", names.arg = lbls, las=1, col = rainbow(15))
+
+```
+
+Baseado no resultado acima, percebemos o incentivo por parte dos entrevistados (todos alunos do Ensino Superior) para que os professores utilizem redes sociais. Entretanto, como a questão não menciona com qual objetivo os professores utilizariam as redes sociais, ainda não é possível concluir se os alunos apoiam o compartilhamento de informações acadêmicas através das plataformas.
+
+
+### Análise da possibilidade de integração entre docentes e discentes através de redes sociais
+
+Na pergunta de número 5 do questionário, os entrevistados foram indagados se a melhor forma de aproximação entre alunos e professores é através de redes sociais.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$profchegaal)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE}
+barplot(counts, main="A mídia social é a melhor forma dos professores \nse aproximarem de seus alunos?", space=1,, ylim=c(0,30),
+        xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(8))
+```
+
+O resultado obtido acima é surpreendente.
+Uma vez que grande parte dos alunos apoiam o uso de redes sociais pelos seus professores, o esperado era que a maioria considerasse as mídias sociais como uma das melhores formas de integração; o que não está visível no gráfico acima.
+Cerca de 22% dos entrevistados preferem a aproximação de alunos aos seus professores fora das redes sociais. Neste caso, seria interessante aprofundarmos a questão para entender os motivos por esta escolha, podendo envolver questões de privacidade ou insatisfação da mesclagem de vida pessoal e vida acadêmica.
+
+
+### Sobre a relação de melhores resultados de alunos com a integração de mídias sociais às aulas e/ou atividades
+
+Na sexta pergunta, é questionada a possibilidade de alcance de melhores resultados dos alunos, caso as redes sociais possuírem integração com as aulas e atividades estudantis.
+Imagina-se o uso das plataformas para divulgação de material de estudo, atividades e prazos para conclusão.
+\n
+Veja em seguida os resultados.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$melhoraresul)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE}
+barplot(counts, main="Os alunos alcançarão melhores resultados se as mídias sociais\n estiverem integradas às aulas e/ou atividades?", space=1,, ylim=c(0,40),
+        xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(7))
+
+```
+
+Percebemos que quase metade dos entrevistados julgam que os alunos alcançariam melhores resultados com a integração de aulas com as mídias sociais.
+\n
+Portanto, mesmo que seja necessário encontrar outros meios de aproximar alunos de seus professores, é recomendado o uso das plataformas para proporcionar mais ganhos aos alunos.
