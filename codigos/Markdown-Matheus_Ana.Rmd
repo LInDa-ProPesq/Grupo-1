@@ -1,0 +1,412 @@
+---
+title: "markdown_matheus"
+output: pdf_document
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+setwd('/home/matheus-lopes/Documentos/UNESP 2018/2 SEM/CIÊNCIA DE DADOS/Grupo-1')
+path <- "/home/matheus-lopes/Documentos/UNESP 2018/2 SEM/CIÊNCIA DE DADOS/Grupo-1"
+path <- paste(path, "/dados/structured_csv.csv", sep = "")
+install.packages("readxl", repos = "http://cran.us.r-project.org")
+install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+install.packages("ggplot2", repos="http://cran.us.r-project.org")
+library("readxl")
+library("ggplot2")
+#usando xls
+data <- read_excel("dados/umses_graduacao_2018_vtidy.xlsx")
+
+cor <- function(numero_dados) {
+  d=brewer.pal(n = numero_dados, name = "RdBu")
+  return(d)
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Nível de utilização geral de cada mídia social
+
+A partir da formatação dos dados obtidos pelo questionário, conseguimos identificar quais as mídias sociais mais utilizadas pelos entrevistados e quais estão em maior desuso.
+Como está exposto no gráfico abaixo, as 3 mídias sociais mais utilizadas em ordem decrescente são: WhatsApp, YouTube e Facebook.
+
+Já as 3 mídias sociais menos utilizadas são: Tumblr, Snapchat e Pinterest.
+
+Interessante salientar que as mídias sociais informadas através da opção "Outras" foram: Telegram, Moodle, Steam, Skype, Messenger, GitHub, Slack e StackOverFlow. 
+
+```{r, echo=FALSE, warning=FALSE}
+
+
+#GRÁFICO DE USO DAS PLATAFORMAS
+coluna_facebook <- sum(data$facebook)
+coluna_twitter <- sum(data$twitter)
+coluna_whatsapp <- sum(data$whatsapp)
+coluna_linkedin <- sum(data$linkedin)
+coluna_youtube <- sum(data$youtube)
+coluna_instagram <- sum(data$instagram)
+coluna_snapchat <- sum(data$snapchat)
+coluna_tumblr <- sum(data$tumblr)
+coluna_pinterest <- sum(data$pinterest)
+outras_plataf <- 0
+for (i in data$outras_plataformas){
+  if(!is.na(i)){
+    outras_plataf <- outras_plataf+1
+  }
+}
+
+coluna_outras <- outras_plataf
+
+#formatando para criar gráfico
+dados <- c(coluna_facebook, coluna_twitter, coluna_whatsapp, coluna_linkedin, coluna_youtube, 
+           coluna_instagram, coluna_snapchat, coluna_tumblr, coluna_pinterest, coluna_outras)
+
+legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagram", "Snapchat", "Tumblr", "Pinterest", "Outras")
+
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+
+```
+
+
+```{r, echo=FALSE}
+barplot(dados, main="Uso de plataformas de Redes Sociais", col = rainbow(20), horiz=TRUE,
+        width = 500, xlim = c(0,70),cex.names=0.8,
+        xlab="Qtde de entrevistados que são usuários",
+        las=1,
+        names.arg=legenda)
+```
+
+Desta forma, caso necessário realizar o compartilhamento de materiais, por exemplo, entre docentes e discentes através de midias sociais indica-se o compartilhamento de links em grupos de WhatsApp ou criação e divulgação de vídeos pelos chamados canais da plataforma YouTube.
+
+
+# Tempo de uso das mídias sociais por dia
+
+O celular, nas últimas 2 décadas, passou a ser um dos objetos mais utilizados pelos humanos. Com a evolução e popularização dos telefones móveis, o uso diário tornou-se comum. Devido a isso, as redes sociais também receberam um grande aumento no número de usuários.
+
+No gráfico abaixo é possível visualizar o tempo de uso de redes sociais por dia útil. Consideramos que esse uso é feito tanto através de computadores ou notebooks quanto por celulares.
+
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$tempogasto)
+slices <- c(tabela)
+lbls <- c("Nenhum/Não uso -", "00:05 a 00:10 -", "00:10 a 00:30 -", "00:30 a 01:00 -",
+          "01:00 a 02:00 -","02:00 a 03:00 -","03:00 a 04:00 -","04:00 a 05:00 -","mais de 05:00 -");
+
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+```
+
+
+```{r, echo=FALSE}
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+    main="Tempo de uso das mídias sociais por dia", radius = 1, init.angle = 0, border = 1)
+
+```
+
+Vemos que mais de 60% dos entrevistados navegam pelas redes sociais pelo menos por 1 hora por dia. A frequência de uso mais indicada é a de 1 a 2 horas de redes sociais por dia.
+
+
+
+# Opinião dos entrevistados sobre o uso de mídias sociais por professores
+Através da pergunta número 4 do formulário obteu-se a aceitação sobre do uso de redes sociais pelos professores do Ensino Superior.
+
+Veja no gráfico abaixo o compilado das respostas obtidas.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$usoacademico)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Sim, \nporém com restrições", "Não sei") 
+```
+
+```{r echo=FALSE}
+barplot(counts, main="Mídia social é uma ferramenta que \npode/deve ser utilizada pelos professores?", space=1, ylim=c(0,40),
+        xlab="Opinião dos entrevistados", names.arg = lbls, las=1, col = rainbow(15))
+
+```
+
+Baseado no resultado acima, percebemos o incentivo por parte dos entrevistados (todos alunos do Ensino Superior) para que os professores utilizem redes sociais. Entretanto, como a questão não menciona com qual objetivo os professores utilizariam as redes sociais, ainda não é possível concluir se os alunos apoiam o compartilhamento de informações acadêmicas através das plataformas.
+
+
+# Análise da possibilidade de integração entre docentes e discentes através de redes sociais
+
+Na pergunta de número 5 do questionário, os entrevistados foram indagados se a melhor forma de aproximação entre alunos e professores é através de redes sociais.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$profchegaal)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE}
+barplot(counts, main="A mídia social é a melhor forma dos professores \nse aproximarem de seus alunos?", space=1,, ylim=c(0,30),
+        xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(8))
+```
+
+O resultado obtido acima é surpreendente.
+
+Uma vez que grande parte dos alunos apoiam o uso de redes sociais pelos seus professores, o esperado era que a maioria considerasse as mídias sociais como uma das melhores formas de integração; o que não está visível no gráfico acima.
+Cerca de 22% dos entrevistados consideram que a melhor forma de aproximação de alunos aos seus professores não é através das redes sociais. Neste caso, seria interessante aprofundarmos a questão para entender os motivos por esta escolha, podendo envolver questões de privacidade ou insatisfação da mesclagem de vida pessoal e vida acadêmica.
+
+
+# Sobre a relação de melhores resultados de alunos com a integração de mídias sociais às aulas e/ou atividades
+
+Na sexta pergunta, é questionada a possibilidade de alcance de melhores resultados dos alunos, caso as redes sociais possuírem integração com as aulas e atividades estudantis.
+Imagina-se o uso das plataformas para divulgação de material de estudo, atividades e prazos para conclusão.
+
+Veja em seguida os resultados.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$melhoraresul)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE}
+barplot(counts, main="Os alunos alcançarão melhores resultados se as mídias sociais\n estiverem integradas às aulas e/ou atividades?", space=1,, ylim=c(0,40),
+        xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(7))
+
+```
+
+Percebemos que quase metade dos entrevistados julgam que os alunos alcançariam melhores resultados com a integração de aulas com as mídias sociais.
+
+Portanto, mesmo que seja necessário encontrar outros meios de aproximar alunos de seus professores(vide resultado da pergunta 5), é recomendado o uso das plataformas para proporcionar mais ganhos aos alunos, seja disponbilizando materiais ou recebendo entregas de atividades, por exemplo.
+
+
+# Avaliação dos recursos das redes sociais para o uso na Educação
+
+
+O que costuma levar pessoas a utilizar determinadas redes sociais e manterem um certo hábito e continuidade no uso destas são os recursos que cada uma delas oferece. Seja na hora de compartilhar informações, ou de estabelecer contato, de armazenar conteúdo, e assim por diante. Quanto mais flexibilidade e opções a plataforma oferece, mais as pessoas se tornarão dependentes desses recursos.
+
+Na última sessão do questionário, foi questionada a avaliação dos recursos das mídias sociais na educação, classificando-os em Excelente, Bom, Indiferente, Pobre ou Muito pobre. 
+
+No gráfico, foram considerados os seguintes recursos:
+
+a. Envio de informações da escola para os pais.
+b. Um número crescente de instituições educacionais está usando mídias sociais por motivos promocionais.
+c. As escolas estão começando a usar grupos no Facebook para se comunicar com os alunos.
+d. Os membros dos grupos podem trocar arquivos, links, informações, pesquisas e vídeos rapidamente. Quando alguém contribui com o grupo, seus membros recebem uma notificação. Se for utilizado o aplicativo Facebook para smartphone, estas trocas são enviadas diretamente para o dispositivo móvel dos alunos.
+e. Estudantes e professores podem compartilhar informações entre si.
+f. O aplicativo “Pinterest" está se tornando popular como um "quadro virtual". O App permite compartilhar, carregar, classificar e gerenciar imagens, vídeos e outros conteúdos multimídia. É ótimo para compartilhar recursos da internet que os alunos acharem interessantes ou relevantes.
+
+
+```{r, echo=FALSE, warning=FALSE}
+envio_info_pais_txt <- "Recurso A"
+envio_info_pais <- data$evioinfo
+envio_info_pais_excelente <- sum(envio_info_pais == '1')
+envio_info_pais_bom <- sum(envio_info_pais == '2')
+envio_info_pais_indiferente <- sum(envio_info_pais == '3')
+envio_info_pais_ruim <- sum(envio_info_pais == '4')
+envio_info_pais_muitoruim <- sum(envio_info_pais == '5')
+envio_pais_max <- max(envio_info_pais_excelente)
+
+envio_info_pais_arr <- c(
+  envio_info_pais_excelente,
+  envio_info_pais_bom,
+  envio_info_pais_indiferente,
+  envio_info_pais_ruim,
+  envio_info_pais_muitoruim
+)
+
+motivos_promocionais_txt <- "Recurso B"#usando mídias sociais por motivos promocionais."
+motivos_promocionais <- data$grandeuso
+motivos_promocionais_excelente <- sum(motivos_promocionais == '1')
+motivos_promocionais_bom <- sum(motivos_promocionais == '2')
+motivos_promocionais_indiferente <- sum(motivos_promocionais == '3')
+motivos_promocionais_ruim <- sum(motivos_promocionais == '4')
+motivos_promocionais_muitoruim <- sum(motivos_promocionais == '5')
+
+motivos_promocionais_arr <- c(
+  motivos_promocionais_excelente,
+  motivos_promocionais_bom,
+  motivos_promocionais_indiferente,
+  motivos_promocionais_ruim,
+  motivos_promocionais_muitoruim
+)
+
+grupo_facebook_txt <- "Recurso C"#comunicar com os alunos."
+grupo_facebook <- data$facegrupo
+grupo_facebook_excelente <- sum(grupo_facebook == '1')
+grupo_facebook_bom <- sum(grupo_facebook == '2')
+grupo_facebook_indiferente <- sum(grupo_facebook == '3')
+grupo_facebook_ruim <- sum(grupo_facebook == '4')
+grupo_facebook_muitoruim <- sum(grupo_facebook == '5')
+
+grupo_facebook_arr <- c(
+  grupo_facebook_excelente,
+  grupo_facebook_bom,
+  grupo_facebook_indiferente,
+  grupo_facebook_ruim,
+  grupo_facebook_muitoruim
+)
+
+troca_infos_txt <- "Recurso D"#pesquisas e vídeos rapidamente. Quando alguém contribui com o grupo, seus membros recebem uma notificação. No Facebook para smartphone, estas trocas são enviadas diretamente para o dispositivo móvel dos alunos."
+troca_infos <- data$trocainfo
+troca_infos_excelente <- sum(troca_infos == '1')
+troca_infos_bom <- sum(troca_infos == '2')
+troca_infos_indiferente <- sum(troca_infos == '3')
+troca_infos_ruim <- sum(troca_infos == '4')
+troca_infos_muitoruim <- sum(troca_infos == '5')
+
+troca_infos_arr <- c(
+  troca_infos_excelente,
+  troca_infos_bom,
+  troca_infos_indiferente,
+  troca_infos_ruim,
+  troca_infos_muitoruim
+)
+
+compart_estud_profs_txt <- "Recurso E"#entre si."
+compart_estud_profs <- data$compinfopal
+compart_estud_profs_excelente <- sum(compart_estud_profs == '1')
+compart_estud_profs_bom <- sum(compart_estud_profs == '2')
+compart_estud_profs_indiferente <- sum(compart_estud_profs == '3')
+compart_estud_profs_ruim <- sum(compart_estud_profs == '4')
+compart_estud_profs_muitoruim <- sum(compart_estud_profs == '5')
+
+compart_estud_profs_arr <- c(
+  compart_estud_profs_excelente,
+  compart_estud_profs_bom,
+  compart_estud_profs_indiferente,
+  compart_estud_profs_ruim,
+  compart_estud_profs_muitoruim
+)
+
+pinterest_txt <- "Recurso F"#compartilhar, carregar, classificar e gerenciar imagens, vídeos e outros conteúdos multimídia. É ótimo para compartilhar recursos que os alunos acharem interessantes ou relevantes"
+pinterest <- data$quadrovirtual
+pinterest_excelente <- sum(pinterest == '1')
+pinterest_bom <- sum(pinterest == '2')
+pinterest_indiferente <- sum(pinterest == '3')
+pinterest_ruim <- sum(pinterest == '4')
+pinterest_muitoruim <- sum(pinterest == '5')
+
+pinterest_arr <- c(
+  pinterest_excelente,
+  pinterest_bom,
+  pinterest_indiferente,
+  pinterest_ruim,
+  pinterest_muitoruim
+)
+
+avaliacoes_recursos <- data.frame(
+  "Avaliações" = c('1', '2', '3', '4', '5'),
+  envio_info_pais_txt = envio_info_pais_arr,
+  motivos_promocionais_txt = motivos_promocionais_arr,
+  grupo_facebook_txt = grupo_facebook_arr,
+  troca_infos_txt = troca_infos_arr,
+  compart_estud_profs_txt = compart_estud_profs_arr,
+  pinterest_txt = pinterest_arr
+)
+
+recursos = c(
+  rep(envio_info_pais_txt, 5), 
+  rep(motivos_promocionais_txt, 5), 
+  rep(grupo_facebook_txt, 5),
+  rep(troca_infos_txt, 5), 
+  rep(compart_estud_profs_txt, 5), 
+  rep(pinterest_txt, 5)
+) # 5 avaliações
+
+avaliacoes = rep(c(
+  '1. Excelente', 
+  '2. Bom', 
+  '3. Indiferente',
+  '4. Pobre',
+  '5. Muito pobre'
+), 6) # 6 recursos
+
+valores = c(
+  envio_info_pais_arr, motivos_promocionais_arr, grupo_facebook_arr,
+  troca_infos_arr, compart_estud_profs_arr, pinterest_arr
+)
+valores[is.na(valores)] <- 0
+
+dados = data.frame(recursos, avaliacoes, valores)
+
+```
+
+```{r, echo=FALSE}
+ggplot(dados, aes(fill=avaliacoes, y=valores, x=recursos)) +
+  geom_bar(stat="identity") + labs(x = "Recursos", y = "Quantidades", fill = "Avaliações") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Observando o gráfico que contabiliza as respostas, podemos observar que na média os recursos foram considerados bons.
+
+O recurso que foi melhor avaliado, obtendo o maior número de “Excelente” e nenhum “Pobre” ou “Muito pobre”, foi do aplicativo Facebook que disponibiliza a ferramenta de criação de grupos para compartilhamento de informações que são notificadas aos participantes. Na sequência, o recurso que compreende a troca de informações entre alunos e professores.
+
+A troca de informações escolares com os pais, bem como o número crescente de instituições estarem utilizando as plataformas sociais como meios de promoção, foram os recursos que mais obtiveram classificações ruins, com os maiores números de “Muito pobre”.
+
+Sobre o recurso do aplicativo Pinterest, foi o que mais obteve a classificação “Indiferente”, sendo inclusive o maior número dentre as categorias em que foi avaliado. 
+
+O recurso que diz respeito à promoção de instituições escolares, apesar de obter classificações ruins, foi o segundo colocado nesta mesma classificação.
+
+
+# Plataformas mais utilizadas dentre os que julgam alcançarem melhores resultados se houver integração entre mídias sociais e graduação
+
+A fim de melhor utilização dos resultados da pesquisa e facilitação das possíveis ações dos docentes, realizamos a mesclagem dos dados obtidos pelas perguntas 1 e 6 para identificar a rede social mais utilizada dentre os que consideram melhoria em seus resultados com a integração dos estudos e redes sociais.
+
+
+```{r, echo=FALSE, warning=FALSE}
+#criando um arquivo estruturado com ID para as linhas
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+#write.csv(agrupa, "dados/structured_csv.csv",row.names=FALSE)
+
+#excluindo os individuos que nao responderam sim para a pergunta 6
+vetor_exclusao <- c()
+id<-1
+for(resp in agrupa$melhoraresul){
+  if(resp != '2'){
+    vetor_exclusao <- c(vetor_exclusao,id)
+  }
+  id<-id+1
+}
+
+agrupa <- agrupa[-c(vetor_exclusao), ]
+data <- agrupa
+
+#criando o gráfico
+coluna_facebook <- sum(data$facebook)
+coluna_twitter <- sum(data$twitter)
+coluna_whatsapp <- sum(data$whatsapp)
+coluna_linkedin <- sum(data$linkedin)
+coluna_youtube <- sum(data$youtube)
+coluna_instagram <- sum(data$instagram)
+coluna_snapchat <- sum(data$snapchat)
+coluna_tumblr <- sum(data$tumblr)
+coluna_pinterest <- sum(data$pinterest)
+outras_plataf <- 0
+for (i in data$outras_plataformas){
+  if(!is.na(i)){
+    outras_plataf <- outras_plataf+1
+  }
+}
+
+coluna_outras <- outras_plataf
+
+#formatando para criar gráfico
+dados <- c(coluna_facebook, coluna_twitter, coluna_whatsapp, coluna_linkedin, coluna_youtube, 
+           coluna_instagram, coluna_snapchat, coluna_tumblr, coluna_pinterest, coluna_outras)
+
+legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagram", "Snapchat", "Tumblr", "Pinterest", "Outras")
+
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+
+```
+
+```{r, echo=FALSE}
+barplot(dados, main="Plataformas mais usadas por aqueles \nque consideram que terão melhores resultados com \na integração de mídias sociais com aulas/atividades", col = rainbow(30), horiz=TRUE,
+        width = 500, xlim = c(0,40),cex.names=0.8,
+        xlab="Qtde de usuários por plataforma",
+        las=1,
+        names.arg=legenda, space=1)
+```
+
+Observa-se no gráfico acima que a plataforma mais utilizada continua sendo o WhatsApp, mesmo resultado obtido considerando todos os envolvidos na pesquisa.
+Em segundo lugar, manteve-se o YouTube, mas com uma diferença menor do terceiro andar, que é novamente o Facebook.
+
+Desta forma, indica-se o WhatsApp como principal ferramenta de compartilhamento de conteúdo entre discentes e docentes da Unesp de Bauru.
