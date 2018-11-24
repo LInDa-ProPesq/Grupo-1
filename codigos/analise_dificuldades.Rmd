@@ -8,6 +8,8 @@ output:
 ---
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+install.packages("readxl", repos = "http://cran.us.r-project.org")
+install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
 library("RColorBrewer")
 library("readxl")
 
@@ -30,6 +32,8 @@ cor <- function(numero_dados) {
 Como podemos perceber, o gráfico apresentado demonstra que as principais dificuldades enfrentadas pelos usuários estão relacionadas a distração que as mídias sociais podem trazer, além do possível uso indevido das plataformas dentro de sala de aula.
 
 Problemas referentes a distração em sala de aula indicam uma preocupação com a liberdade oferecida aos alunos durante a utilização dessas plataformas para fins acadêmicos. Por apresentarem milhares de conteúdos interativos, as redes sociais podem ser fonte de distrações se não forem delimitados os acessos durante a aula.
+
+Mesmo com algumas dificuldades apontadas pelos entrevistados, tais dificuldades se mostram superáveis, não representando um empecilho para a aplicação das mídias sociais no meio educacional.
 
 ```{r, echo=FALSE, warning=FALSE}
 labels <- c(
