@@ -1,0 +1,233 @@
+---
+title: "Analise_Dificuldades"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library("RColorBrewer")
+library("readxl")
+library("ggplot2")
+
+df <- read_excel("/Users/Pedro Henrique Mota/Documents/Unesp/Data Science/Analise/dados/umses_graduacao_2018_vtidy.xlsx")
+
+distracao <- sum(df$distracao == '1')
+usoindev <- sum(df$usoindev == '1')
+prejintera <- sum(df$prejintera == '1')
+bulling <- sum(df$bulling == '1')
+continadeq <- sum(df$continadeq == '1')
+
+cor <- function(numero_dados) {
+  d=brewer.pal(n = numero_dados, name = "RdBu")
+  return(d)
+}
+```
+## Análise de motivos de utilização com tempo de uso
+
+Como podemos verificar com o gráfico a seguir, a maior parte dos entrevistados despende grande parcela de tempo na busca por conteúdos. Esse fator demonstra-se favorável a utilização de mídias sociais na divulgação de assuntos referentes à disciplinas acadêmicas.
+
+Outro motivo com grande período de utilização associado é de "Preencher tempo". Isto também poderia ser utilizado como argumento para divulgação de conteúdo educacional, visto que, em horários vagos, os usuários poderiam ter acesso a informações acadêmicas, preenchendo o tempo com a obtenção de conhecimento.
+
+```{r, echo=FALSE, warning=FALSE}
+# Motivo - contato
+contato <- df[df$contato == '1',]
+tempos_contato <- c(
+  sum(contato$tempogasto == '2'),
+  sum(contato$tempogasto == '3'),
+  sum(contato$tempogasto == '4'),
+  sum(contato$tempogasto == '5'),
+  sum(contato$tempogasto == '6'),
+  sum(contato$tempogasto == '7'),
+  sum(contato$tempogasto == '8'),
+  sum(contato$tempogasto == '9')
+)
+
+# Motivo - atualizado
+atualizado <- df[df$atualizado == '1',]
+tempos_atualizado <- c(
+  sum(atualizado$tempogasto == '2'),
+  sum(atualizado$tempogasto == '3'),
+  sum(atualizado$tempogasto == '4'),
+  sum(atualizado$tempogasto == '5'),
+  sum(atualizado$tempogasto == '6'),
+  sum(atualizado$tempogasto == '7'),
+  sum(atualizado$tempogasto == '8'),
+  sum(atualizado$tempogasto == '9')
+)
+
+# Motivo - preencher
+preencher <- df[df$preencher == '1',]
+tempos_preencher <- c(
+  sum(preencher$tempogasto == '2'),
+  sum(preencher$tempogasto == '3'),
+  sum(preencher$tempogasto == '4'),
+  sum(preencher$tempogasto == '5'),
+  sum(preencher$tempogasto == '6'),
+  sum(preencher$tempogasto == '7'),
+  sum(preencher$tempogasto == '8'),
+  sum(preencher$tempogasto == '9')
+)
+
+# Motivo - encontrar
+encontrar <- df[df$encontrar == '1',]
+tempos_encontrar <- c(
+  sum(encontrar$tempogasto == '2'),
+  sum(encontrar$tempogasto == '3'),
+  sum(encontrar$tempogasto == '4'),
+  sum(encontrar$tempogasto == '5'),
+  sum(encontrar$tempogasto == '6'),
+  sum(encontrar$tempogasto == '7'),
+  sum(encontrar$tempogasto == '8'),
+  sum(encontrar$tempogasto == '9')
+)
+
+# Motivo - compopiniao
+compopiniao <- df[df$compopiniao == '1',]
+tempos_compopiniao <- c(
+  sum(compopiniao$tempogasto == '2'),
+  sum(compopiniao$tempogasto == '3'),
+  sum(compopiniao$tempogasto == '4'),
+  sum(compopiniao$tempogasto == '5'),
+  sum(compopiniao$tempogasto == '6'),
+  sum(compopiniao$tempogasto == '7'),
+  sum(compopiniao$tempogasto == '8'),
+  sum(compopiniao$tempogasto == '9')
+)
+
+# Motivo - compfoto
+compfoto <- df[df$compfoto == '1',]
+tempos_compfoto <- c(
+  sum(compfoto$tempogasto == '2'),
+  sum(compfoto$tempogasto == '3'),
+  sum(compfoto$tempogasto == '4'),
+  sum(compfoto$tempogasto == '5'),
+  sum(compfoto$tempogasto == '6'),
+  sum(compfoto$tempogasto == '7'),
+  sum(compfoto$tempogasto == '8'),
+  sum(compfoto$tempogasto == '9')
+)
+
+# Motivo - amigosja
+amigosja <- df[df$amigosja == '1',]
+tempos_amigosja <- c(
+  sum(amigosja$tempogasto == '2'),
+  sum(amigosja$tempogasto == '3'),
+  sum(amigosja$tempogasto == '4'),
+  sum(amigosja$tempogasto == '5'),
+  sum(amigosja$tempogasto == '6'),
+  sum(amigosja$tempogasto == '7'),
+  sum(amigosja$tempogasto == '8'),
+  sum(amigosja$tempogasto == '9')
+)
+
+# Motivo - profnetwork
+profnetwork <- df[df$profnetwork == '1',]
+tempos_profnetwork <- c(
+  sum(profnetwork$tempogasto == '2'),
+  sum(profnetwork$tempogasto == '3'),
+  sum(profnetwork$tempogasto == '4'),
+  sum(profnetwork$tempogasto == '5'),
+  sum(profnetwork$tempogasto == '6'),
+  sum(profnetwork$tempogasto == '7'),
+  sum(profnetwork$tempogasto == '8'),
+  sum(profnetwork$tempogasto == '9')
+)
+
+# Motivo - novaamizade
+novaamizade <- df[df$novaamizade == '1',]
+tempos_novaamizade <- c(
+  sum(novaamizade$tempogasto == '2'),
+  sum(novaamizade$tempogasto == '3'),
+  sum(novaamizade$tempogasto == '4'),
+  sum(novaamizade$tempogasto == '5'),
+  sum(novaamizade$tempogasto == '6'),
+  sum(novaamizade$tempogasto == '7'),
+  sum(novaamizade$tempogasto == '8'),
+  sum(novaamizade$tempogasto == '9')
+)
+
+# Motivo - compdetalhe
+compdetalhe <- df[df$compdetalhe == '1',]
+tempos_compdetalhe <- c(
+  sum(compdetalhe$tempogasto == '2'),
+  sum(compdetalhe$tempogasto == '3'),
+  sum(compdetalhe$tempogasto == '4'),
+  sum(compdetalhe$tempogasto == '5'),
+  sum(compdetalhe$tempogasto == '6'),
+  sum(compdetalhe$tempogasto == '7'),
+  sum(compdetalhe$tempogasto == '8'),
+  sum(compdetalhe$tempogasto == '9')
+)
+
+# Motivo - outros_motivos
+outros_motivos <- df[df$outros_motivos == '1',]
+tempos_outros_motivos <- c(
+  sum(outros_motivos$tempogasto == '2'),
+  sum(outros_motivos$tempogasto == '3'),
+  sum(outros_motivos$tempogasto == '4'),
+  sum(outros_motivos$tempogasto == '5'),
+  sum(outros_motivos$tempogasto == '6'),
+  sum(outros_motivos$tempogasto == '7'),
+  sum(outros_motivos$tempogasto == '8'),
+  sum(outros_motivos$tempogasto == '9')
+)
+
+tempos_motivos <- data.frame(
+  "Tempos" = c('2', '3', '4', '5', '6', '7', '8', '9'),
+  "Contato" = tempos_contato,
+  "Atualizado" = tempos_atualizado,
+  "Preenhcer" = tempos_preencher,
+  "Encontrar" = tempos_encontrar,
+  "Comp. Opinião" = tempos_compopiniao,
+  "Comp. Foto" = tempos_compfoto,
+  "Amigos" = tempos_amigosja,
+  "Prof Net" = tempos_profnetwork,
+  "Nova amizade" = tempos_novaamizade,
+  "Comp. detalhe" = tempos_compdetalhe,
+  "Outros" = tempos_outros_motivos
+)
+
+motivos = c(
+  rep("Manter contato", 8), rep("Manter-se atualizado", 8), rep("Preencher tempo", 8),
+  rep("Encontrar conteúdo", 8), rep("Compartilhar opiniões", 8), rep("Compartilhar fotos", 8),
+  rep("Amigos já estão na mídia", 8), rep("Networking", 8), rep("Conhecer pessoas", 8),
+  rep("Assuntos de trabalho", 8), rep("Outros motivos", 8)
+) # 8 tempos
+
+tempos = rep(c(
+  'de 5 a 10 minutos', 
+  'de 10 a 30 minutos', 
+  'de 30 minutos a 1 hora',
+  'de 1 a 2 horas',
+  'de 2 a 3 horas',
+  'de 3 a 4 horas',
+  'de 4 a 5 horas',
+  'mais de 5 horas'
+), 11) # 11 motivos
+
+valores = c(
+  tempos_contato, tempos_atualizado, tempos_preencher, tempos_encontrar, tempos_compopiniao,
+  tempos_compfoto, tempos_amigosja, tempos_profnetwork, tempos_novaamizade, tempos_compdetalhe,
+  tempos_outros_motivos
+)
+valores[is.na(valores)] <- 0
+
+dados = data.frame(motivos, tempos, valores)
+
+ggplot(dados, aes(fill=tempos, y=valores, x=motivos)) +
+  geom_bar(stat="identity") + labs(x = "Motivos de contato", y = "Quantidades", fill = "Tempos") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
