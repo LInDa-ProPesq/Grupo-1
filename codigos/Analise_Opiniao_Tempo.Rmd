@@ -1,0 +1,169 @@
+---
+title: "Analise_Opiniao_Tempo"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library("readxl")
+
+df <- read_excel("/home/vina/Documentos/Projetos/Grupo-1/dados/umses_graduacao_2018_vtidy.xlsx")
+
+melhoraresul = df$melhoraresul
+#1.Não
+#2.Sim
+#3.Não sei / Não tenho opinião
+
+melhoraresul.nao <- sum(melhoraresul == '1')
+melhoraresul.sim <- sum(melhoraresul == '2')
+melhoraresul.nao_sei <- sum(melhoraresul == '3')
+melhoraresul.nao.tempo = subset(df, df$melhoraresul == 1,select=c("tempogasto"))
+melhoraresul.sim.tempo = subset(df, df$melhoraresul == 2,select=c("tempogasto"))
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+mr = c(melhoraresul.nao, melhoraresul.sim, melhoraresul.nao_sei)
+legenda_analise <- c("Não", "Sim", "Não sei / Não tenho opinião")
+qtd <- length(legenda_analise)
+pct <- round(mr/sum(mr)*100)
+legenda_analise <- paste(legenda_analise, pct)
+legenda_analise <- paste(legenda_analise,"%",sep="")
+```
+
+```{r, fig.width=14, fig.height=6}
+pie(mr, labels = legenda_analise, col = c("red","green2", "orange"),
+    main = "Mídias sociais integradas às aulas podem \nmelhorar os resultados dos alunos?")
+```
+
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.sim.tempo.1 <- sum(melhoraresul.sim.tempo$tempogasto == 1)
+melhoraresul.sim.tempo.2 <- sum(melhoraresul.sim.tempo$tempogasto == 2)
+melhoraresul.sim.tempo.3 <- sum(melhoraresul.sim.tempo$tempogasto == 3)
+melhoraresul.sim.tempo.4 <- sum(melhoraresul.sim.tempo$tempogasto == 4)
+melhoraresul.sim.tempo.5 <- sum(melhoraresul.sim.tempo$tempogasto == 5)
+melhoraresul.sim.tempo.6 <- sum(melhoraresul.sim.tempo$tempogasto == 6)
+melhoraresul.sim.tempo.7 <- sum(melhoraresul.sim.tempo$tempogasto == 7)
+melhoraresul.sim.tempo.8 <- sum(melhoraresul.sim.tempo$tempogasto == 8)
+melhoraresul.sim.tempo.9 <- sum(melhoraresul.sim.tempo$tempogasto == 9)
+
+#note que melhoraresul.sim.tempo.8 = 0
+legenda_tempo_sim <- c("de 30 minutos até 1 hora", 
+                  "de 1 a 2 horas", 
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+chart_sim <- c(melhoraresul.sim.tempo.4, 
+          melhoraresul.sim.tempo.5, 
+          melhoraresul.sim.tempo.6,
+          melhoraresul.sim.tempo.7,
+          melhoraresul.sim.tempo.9)
+
+qtd <- length(legenda_tempo_sim)
+pct <- round(chart_sim/sum(chart_sim)*100)
+pct <- paste(pct,"%",sep="")
+
+```
+
+```{r, fig.width=14, fig.height=6}
+pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"))
+legend("topleft", inset=.0, 
+       title="Tempo gasto",
+       legenda_tempo_sim, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       text.font=2, cex=0.90)
+```
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.nao.tempo.1 <- sum(melhoraresul.nao.tempo$tempogasto == 1)
+melhoraresul.nao.tempo.2 <- sum(melhoraresul.nao.tempo$tempogasto == 2)
+melhoraresul.nao.tempo.3 <- sum(melhoraresul.nao.tempo$tempogasto == 3)
+melhoraresul.nao.tempo.4 <- sum(melhoraresul.nao.tempo$tempogasto == 4)
+melhoraresul.nao.tempo.5 <- sum(melhoraresul.nao.tempo$tempogasto == 5)
+melhoraresul.nao.tempo.6 <- sum(melhoraresul.nao.tempo$tempogasto == 6)
+melhoraresul.nao.tempo.7 <- sum(melhoraresul.nao.tempo$tempogasto == 7)
+melhoraresul.nao.tempo.8 <- sum(melhoraresul.nao.tempo$tempogasto == 8)
+melhoraresul.nao.tempo.9 <- sum(melhoraresul.nao.tempo$tempogasto == 9)
+
+#note que melhoraresul.nao.tempo.4, melhoraresul.nao.tempo.5 e melhoraresul.nao.tempo.8 são iguais a 0  
+legenda_tempo_nao <- c("de 5 a 10 minutos", 
+                  "de 10 a 30 minutos",
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+
+chart_nao <- c(melhoraresul.nao.tempo.2,
+          melhoraresul.nao.tempo.3, 
+          melhoraresul.nao.tempo.6,
+          melhoraresul.nao.tempo.7,
+          melhoraresul.nao.tempo.9)
+
+pct <- round(chart_sim/sum(chart_sim)*100)
+pct <- paste(pct,"%",sep="")
+```
+
+```{r, fig.width=14, fig.height=6}
+pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"))
+legend("topleft", inset=.0, 
+       title="Tempo gasto",
+       legenda_tempo_nao, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       text.font=2, cex=0.90)
+```
+
+```{r, echo=FALSE, warning=FALSE}
+all_nao = c(melhoraresul.nao.tempo.1,
+            melhoraresul.nao.tempo.2,
+            melhoraresul.nao.tempo.3,
+            melhoraresul.nao.tempo.4,
+            melhoraresul.nao.tempo.5,
+            melhoraresul.nao.tempo.6,
+            melhoraresul.nao.tempo.7,
+            melhoraresul.nao.tempo.8,
+            melhoraresul.nao.tempo.9)
+
+all_sim = c(melhoraresul.sim.tempo.1,
+            melhoraresul.sim.tempo.2,
+            melhoraresul.sim.tempo.3,
+            melhoraresul.sim.tempo.4,
+            melhoraresul.sim.tempo.5,
+            melhoraresul.sim.tempo.6,
+            melhoraresul.sim.tempo.7,
+            melhoraresul.sim.tempo.8,
+            melhoraresul.sim.tempo.9)
+
+all = data.frame(
+  all_sim = all_sim,
+  all_nao = all_nao,
+  stringsAsFactors=F
+)
+all_matrix = as.matrix(all)
+colnames(all_matrix) <- c("all_sim","all_nao")
+
+legenda_all = c("Nenhum",
+                "5 a 10 minutos",
+                "10 a 30 minutos",
+                "30 a 60 minutos",
+                "1 a 2 horas", 
+                "2 a 3 horas",
+                "3 a 4 horas",
+                "4 a 5 horas",
+                "> 5horas")
+```
+
+```{r, fig.width=14, fig.height=6}
+barplot(t(all[c('all_sim','all_nao')]), beside = TRUE,
+        cex.names=0.85,
+        xlab="Tempo gasto",
+        names.arg=legenda_all,
+        col=c("seagreen2","indianred1"),
+        ylim=c(0,12))
+
+legend("topleft", inset=.015, 
+       title="Acredita nas mídias sociais como ferramentas de auxílio ao ensino",
+       c("Sim","Não"), fill=c("seagreen2","indianred1"), text.font=2, cex=0.9)
+```
