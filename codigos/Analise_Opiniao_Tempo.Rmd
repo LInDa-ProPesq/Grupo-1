@@ -29,16 +29,33 @@ melhoraresul.sim.tempo = subset(df, df$melhoraresul == 2,select=c("tempogasto"))
 mr = c(melhoraresul.nao, melhoraresul.sim, melhoraresul.nao_sei)
 legenda_analise <- c("Não", "Sim", "Não sei / Não tenho opinião")
 qtd <- length(legenda_analise)
-pct <- round(mr/sum(mr)*100)
+pct <- round(mr/sum(mr)*100, digits = 1)
 legenda_analise <- paste(legenda_analise, pct)
 legenda_analise <- paste(legenda_analise,"%",sep="")
 ```
 
-```{r, fig.width=14, fig.height=6}
-pie(mr, labels = legenda_analise, col = c("red","green2", "orange"),
-    main = "Mídias sociais integradas às aulas podem \nmelhorar os resultados dos alunos?")
+Embora o uso das redes sociais como apoio aos professores ainda divida opiniões, é de consentimento geral que o debate, nessa etapa da discussão, é essencial. Uma universidade pública como a UNESP compreende uma parcela de público diversificada e, portanto, muito importante para essa discussão.
+
+Pensando nisso, analisaremos então a questão na presente seção.
+
+### Opinião dos participantes
+
+Aprofundando-se na opinião dos entrevistados, verificamos um aceno significativo, onde mais de 60% vê as redes sociais como uma opção interassante de ferramenta de ensino.
+
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(mr, labels = legenda_analise, col = c("indianred1","seagreen2","peachpuff1"),
+    main="Midias sociais integradas as aulas podem melhorar os resultados dos alunos?")
 ```
 
+A informação, no entanto, diz pouco sobre a opinião do público da pesquisa acerca do tema, deixando questões como por responder. 
+
+
+### As respotas e o tempo
+
+Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que isso está intimamente ligado a maneira como eles vêm e entendem essas redes.
+
+Como forma de analisar a questão apresentamos alguns gráficos que relacionam o tempo gasto dos entrevistados e sua opinião sobre o uso das mídias sociais.
 
 ```{r, echo=FALSE, warning=FALSE}
 melhoraresul.sim.tempo.1 <- sum(melhoraresul.sim.tempo$tempogasto == 1)
@@ -64,18 +81,20 @@ chart_sim <- c(melhoraresul.sim.tempo.4,
           melhoraresul.sim.tempo.9)
 
 qtd <- length(legenda_tempo_sim)
-pct <- round(chart_sim/sum(chart_sim)*100)
+pct <- round(chart_sim/sum(chart_sim)*100, digits = 1)
 pct <- paste(pct,"%",sep="")
 
 ```
 
-```{r, fig.width=14, fig.height=6}
-pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"))
-legend("topleft", inset=.0, 
-       title="Tempo gasto",
+Abaixo apresentamos dois gráficos. O primeiro diz respeito tempo gasto pelos que vêm as mídias sociais como ferramenta de ensino postitivamente. O segundo, por sua vez, trata justamente do oposto; nele verificamos o tempo daqueles que não depositam confiança nas mídias sociais no auxílio ao ensino.
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que acreditam nas mídias sociais \ncomo ferramenta de ensino")
+legend("topleft",
+       title="Tempo gasto usando mídias sociais",
        legenda_tempo_sim, 
        fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
-       text.font=2, cex=0.90)
+       cex=0.90)
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -102,18 +121,21 @@ chart_nao <- c(melhoraresul.nao.tempo.2,
           melhoraresul.nao.tempo.7,
           melhoraresul.nao.tempo.9)
 
-pct <- round(chart_sim/sum(chart_sim)*100)
+pct <- round(chart_nao/sum(chart_nao)*100, digits = 1)
 pct <- paste(pct,"%",sep="")
 ```
 
-```{r, fig.width=14, fig.height=6}
-pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"))
-legend("topleft", inset=.0, 
-       title="Tempo gasto",
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que NÃO acreditam nas mídias sociais \ncomo ferramenta de ensino")
+legend("topright", 
+       title="Tempo gasto usando mídias sociais",
        legenda_tempo_nao, 
        fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
-       text.font=2, cex=0.90)
+       cex=0.90)
 ```
+
+Aqui podemos ressaltar dois pontos importantes. O primeiro é que a maioria absoluta dos que defendem as mídias como ferramenta usa as mesmas por pelo menos 1 hora ao dia (quase 95%!!) e que TODOS usam por meia hora ou mais. O segundo ponto é sobre os que não acreditam nas redes sociais como ferramenta: embora os tempos de consumo sejam distribuídos, metade não usa redes sociais por mais de 30 minutos no dia!
+
 
 ```{r, echo=FALSE, warning=FALSE}
 all_nao = c(melhoraresul.nao.tempo.1,
@@ -155,15 +177,20 @@ legenda_all = c("Nenhum",
                 "> 5horas")
 ```
 
-```{r, fig.width=14, fig.height=6}
+Para uma visão panorâmica da questão, apresentamos um terceiro gráfico, que segue abaixo:
+
+```{r, fig.align='center', echo=FALSE, fig.width=14, fig.height=8, out.width = '100%'}
 barplot(t(all[c('all_sim','all_nao')]), beside = TRUE,
         cex.names=0.85,
         xlab="Tempo gasto",
         names.arg=legenda_all,
         col=c("seagreen2","indianred1"),
-        ylim=c(0,12))
+        ylim=c(0,12),
+        main="Você acredita nas mídias sociais como ferramentas de auxílio ao ensino?")
 
-legend("topleft", inset=.015, 
-       title="Acredita nas mídias sociais como ferramentas de auxílio ao ensino",
+legend("topleft", inset=.015,
        c("Sim","Não"), fill=c("seagreen2","indianred1"), text.font=2, cex=0.9)
+
 ```
+
+No gráfico fica evidente tanto a grandeza da opinião positiva sobre a negativa, quanto a relação de que as opiniões postivas tendem a se concentrar nos entrevistados que passam mais tempo _online_.

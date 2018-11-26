@@ -113,7 +113,7 @@ chart_nao <- c(melhoraresul.nao.tempo.2,
           melhoraresul.nao.tempo.7,
           melhoraresul.nao.tempo.9)
 
-pct <- round(chart_sim/sum(chart_sim)*100)
+pct <- round(chart_nao/sum(chart_nao)*100)
 pct <- paste(pct,"%",sep="")
 
 pdf("graficos/tempogasto_melhoranao.pdf", 10,7)

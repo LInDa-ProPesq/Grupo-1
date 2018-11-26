@@ -1,7 +1,7 @@
 
 ---
 title: <center>Análise sobre as influências das mídias sociais sobre discentes da instituição de nível superior UNESP Bauru</center>
-author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinicius Camargo"
+author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinícius Camargo"
 output: pdf_document
 mainfont: Arial
 sansfont: Arial
