@@ -1,5 +1,5 @@
 ---
-title: "Apresentacao"
+title: "Análise do corpo discente da UNESP Bauru"
 author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinícius Camargo"
 mainfont: Arial
 sansfont: Arial
@@ -11,10 +11,9 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## INTRODUÇÃO
-
 Nosso projeto foi baseado na análise populacional coletada pelos alunos da turma de Ciência de Dados no segundo semestre de 2018. O objetivo principal do trabalho era responder a questão: *Quais são as influências das mídias sociais sobre discentes da instituição de nível superior UNESP-Bauru-SP?*
 
-Durante todo o projeto procuramos descorrer sobre 
+Desta maneira, durante o projeto coletamos dados de alunos da instituição para que pudéssemos responder questões sobre utilização de dispositivos informacionais em relação ao ambiente acadêmico e profissional.
 
 ## SLIDE UM AQUI
 

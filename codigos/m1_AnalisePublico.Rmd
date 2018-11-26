@@ -825,6 +825,29 @@ pie(dados,labels = legenda, col=cor(qtd),
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+#write.csv(agrupa, "dados/structured_csv.csv",row.names=FALSE)
+
+esta_lin <- subset(agrupa, agrupa$trabalha == 4, select = c(ID, linkedin))
+usam_e_est <- sum(esta_lin$linkedin == '1')
+nao_usam_e_estag <- sum(esta_lin$linkedin == '0')
+
+dados <- c(usam_e_est, nao_usam_e_estag)
+legenda <- c("Usam LinkedIn e estagiam", "Não usam linkedin e não estagiam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.align='center', out.width = '50%'}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="Estagiários que usam LinkedIn")
+```
+
+```{r, echo=FALSE, warning=FALSE}
 #seleciona onde são desempregados e utilizam ou não a plataforma
 desempregados_linkedin <- subset(agrupa, agrupa$trabalha == 1, select = c(ID, linkedin))
 usam_e_desem <- sum(desempregados_linkedin$linkedin == '1')
