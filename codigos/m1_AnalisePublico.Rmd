@@ -789,3 +789,60 @@ Observa-se no gráfico acima que a plataforma mais utilizada continua sendo o Wh
 Em segundo lugar, manteve-se o YouTube, mas com uma diferença menor do terceiro andar, que é novamente o Facebook.
 
 Desta forma, indica-se o WhatsApp como principal ferramenta de compartilhamento de conteúdo entre discentes e docentes da Unesp de Bauru.
+
+## Utilização do linkedin pelos discentes
+Uma das principais abordagens durante o período da universidade é a procura da primeira experiência de trabalho. Para tanto, nos questionamos com base nos dados como os alunos estão utilizando plataformas de vínculo profissional, como o linkedin.
+
+Importante salientar que as pessoas com vínculos remunerados totalizam 37 e, em contrapartida, 24 estão desempregadas. Isso representa que 60,65% dos entrevistados possuem remuneração.
+
+```{r, echo=FALSE, warning=FALSE}
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
+path <- paste(path, "/dados/structured_csv.csv", sep = "")
+#write.csv(agrupa, path,row.names=FALSE)
+
+#atribuindo os valores da coluna genero
+coluna_linkedin <- data$'linkedin'
+coluna_emprego <- data$'trabalha'
+
+usam <- sum(coluna_linkedin == '1')
+nao_usam <- sum(coluna_linkedin == '0')
+
+# % Pessoas Utilizam Linkedin
+dados <- c(usam, nao_usam)
+legenda <- c("Usam LinkedIn", "Não utilizam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.align='center', out.width = '50%'}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="LinkedIn")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+#seleciona onde são desempregados e utilizam ou não a plataforma
+desempregados_linkedin <- subset(agrupa, agrupa$trabalha == 1, select = c(ID, linkedin))
+usam_e_desem <- sum(desempregados_linkedin$linkedin == '1')
+nao_usam_e_desempregado <- sum(desempregados_linkedin$linkedin == '0')
+
+#seleciona onde são empregados e utilizam ou não a plataforma
+empregado_linkedin <- subset(agrupa, agrupa$trabalha == 2 | agrupa$trabalha == 3 | agrupa$trabalha == 4 | agrupa$trabalha == 5 | agrupa$trabalha == 8, select = c(ID, linkedin))
+usam_e_em <- sum(empregado_linkedin$linkedin == '1')
+nao_usam_e_empregado <- sum(empregado_linkedin$linkedin == '0')
+```
+
+De acordo com o gráfico, podemos verificar uma estatística interessante sobre os dados: a maioria dos alunos utiliza o linkedin, o que é relavante tendo em vista que a maioria dos alunos já possuem remunureção.
+
+Porém, gostaríamos de saber também, em relação aos alunos sem remuneração, quantos utilizam. E nesse ponto algo foi surpreendente. 14 dos 24 não remunerados, não utilizam a plataforma, logo uma premissa que pode ser refutada é de que a maioria das pessoas utilizam o linkedin à procura de vagas ou algo parecido.
+
+# Conclusão
+Dentro do trabalho, procuramos elucidar um pouco sobre o perfil dos discentes dos cursos da UNESP Bauru. Analisamos a amostra populacional, bem como sua utilização das mídias sociais. Por fim, procuramos trazer pontos, às vezes, ocultos sobre os meios de comunicação para que os mesmos pudessem ser discutidos.
+
+Doravante, é importante salientar que muito pode ser feito em relação à essas análises. Seria interessante aplicar e discutí-las com o próprio corpo docente da instituição, podendo ocorrer diversos avanços na instituição fruto de uma construção conjunta entre corpo discente e docente.
+
+Por fim, uma sugestão para próximas pesquisas seria ampliar a amostra populacional da análise, o que poderia enriquecer e fomentar discussões lúdicas sobre o ensino na universidade.
