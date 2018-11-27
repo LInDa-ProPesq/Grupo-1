@@ -7,6 +7,11 @@ output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
+library("reshape2")
+library("RColorBrewer")
+library("readxl")
+
+df <- read_excel("/home/vina/Documentos/Projetos/Grupo-1/dados/umses_graduacao_2018_vtidy.xlsx")
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -17,3 +22,252 @@ Desta maneira, durante o projeto coletamos dados de alunos da instituição para
 
 ## SLIDE UM AQUI
 
+## LISA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#usando xls
+data <- df
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+
+#seleciona onde são estagiarios e utilizam ou não a plataforma
+estagiarios_linkedin <- subset(agrupa, agrupa$trabalha == 4, select = c(ID, linkedin))
+usam_e_est <- sum(estagiarios_linkedin$linkedin == '1')
+nao_usam_e_estagiarios <- sum(estagiarios_linkedin$linkedin == '0')
+```
+
+
+```{r, fig.align='center', echo=FALSE}
+dados <- c(usam_e_est, nao_usam_e_estagiarios)
+legenda <- c("Usam LinkedIn e estagiam", "Não utilizam e estagiam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+pie(dados,labels = legenda,
+    main="Estagiários que usam LinkedIn")
+```
+
+##LISA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#usando xls
+data <- df
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+
+parcial_linkedin <- subset(agrupa, agrupa$trabalha == 2, select = c(ID, linkedin))
+usam_e_parc <- sum(parcial_linkedin$linkedin == '1')
+nao_usam_e_parc <- sum(parcial_linkedin$linkedin == '0')
+```
+
+
+```{r, fig.align='center', echo=FALSE}
+dados <- c(usam_e_parc, nao_usam_e_parc)
+legenda <- c("Usam LinkedIn", "Não utilizam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+pie(dados,labels = legenda,
+    main="Fazem jornada parcial e usam LinkedIn")
+```
+
+
+## As redes sociais podem melhorar os resultados dos alunos?
+
+Embora o uso das redes sociais como apoio aos professores ainda divida opiniões, é de consentimento geral que o debate, nessa etapa da discussão, é essencial. 
+
+Uma universidade pública como a UNESP compreende uma parcela de público diversificada e, portanto, muito importante para essa discussão.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library("readxl")
+
+melhoraresul = df$melhoraresul
+#1.Não
+#2.Sim
+#3.Não sei / Não tenho opinião
+
+melhoraresul.nao <- sum(melhoraresul == '1')
+melhoraresul.sim <- sum(melhoraresul == '2')
+melhoraresul.nao_sei <- sum(melhoraresul == '3')
+melhoraresul.nao.tempo = subset(df, df$melhoraresul == 1,select=c("tempogasto"))
+melhoraresul.sim.tempo = subset(df, df$melhoraresul == 2,select=c("tempogasto"))
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+mr = c(melhoraresul.nao, melhoraresul.sim, melhoraresul.nao_sei)
+legenda_analise <- c("Não", "Sim", "Não sei / Não tenho opinião")
+qtd <- length(legenda_analise)
+pct <- round(mr/sum(mr)*100, digits = 1)
+legenda_analise <- paste(legenda_analise, pct)
+legenda_analise <- paste(legenda_analise,"%",sep="")
+```
+
+***
+### Opinião dos participantes
+
+Aprofundando-se na opinião dos entrevistados, verificamos um aceno significativo, onde mais de 60% vê as redes sociais como uma opção interassante de ferramenta a fim de melhorar o ensino.
+
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=5, out.width = '80%'}
+pie(mr, labels = legenda_analise, col = c("indianred1","seagreen2","peachpuff1"),
+    main="Midias sociais integradas as aulas podem melhorar os resultados dos alunos?")
+```
+
+A informação, no entanto, diz pouco sobre a opinião do público da pesquisa acerca do tema, deixando questões como por responder. 
+
+***
+### As respotas e o tempo
+
+Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que sua opinião está intimamente ligada a maneira como eles vêm e entendem essas redes.
+
+Como forma de analisar a questão apresentamos alguns gráficos que relacionam o tempo gasto dos entrevistados e sua opinião sobre o uso das mídias sociais.
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.sim.tempo.1 <- sum(melhoraresul.sim.tempo$tempogasto == 1)
+melhoraresul.sim.tempo.2 <- sum(melhoraresul.sim.tempo$tempogasto == 2)
+melhoraresul.sim.tempo.3 <- sum(melhoraresul.sim.tempo$tempogasto == 3)
+melhoraresul.sim.tempo.4 <- sum(melhoraresul.sim.tempo$tempogasto == 4)
+melhoraresul.sim.tempo.5 <- sum(melhoraresul.sim.tempo$tempogasto == 5)
+melhoraresul.sim.tempo.6 <- sum(melhoraresul.sim.tempo$tempogasto == 6)
+melhoraresul.sim.tempo.7 <- sum(melhoraresul.sim.tempo$tempogasto == 7)
+melhoraresul.sim.tempo.8 <- sum(melhoraresul.sim.tempo$tempogasto == 8)
+melhoraresul.sim.tempo.9 <- sum(melhoraresul.sim.tempo$tempogasto == 9)
+
+#note que melhoraresul.sim.tempo.8 = 0
+legenda_tempo_sim <- c("de 30 minutos até 1 hora", 
+                  "de 1 a 2 horas", 
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+chart_sim <- c(melhoraresul.sim.tempo.4, 
+          melhoraresul.sim.tempo.5, 
+          melhoraresul.sim.tempo.6,
+          melhoraresul.sim.tempo.7,
+          melhoraresul.sim.tempo.9)
+
+qtd <- length(legenda_tempo_sim)
+pct <- round(chart_sim/sum(chart_sim)*100, digits = 1)
+pct <- paste(pct,"%",sep="")
+
+```
+
+***
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=5, out.width = '90%'}
+pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que acreditam na melhoria \ndo ensino através das mídias sociais")
+legend("topleft",
+       title="Tempo gasto usando mídias sociais",
+       legenda_tempo_sim, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       cex=0.90)
+```
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.nao.tempo.1 <- sum(melhoraresul.nao.tempo$tempogasto == 1)
+melhoraresul.nao.tempo.2 <- sum(melhoraresul.nao.tempo$tempogasto == 2)
+melhoraresul.nao.tempo.3 <- sum(melhoraresul.nao.tempo$tempogasto == 3)
+melhoraresul.nao.tempo.4 <- sum(melhoraresul.nao.tempo$tempogasto == 4)
+melhoraresul.nao.tempo.5 <- sum(melhoraresul.nao.tempo$tempogasto == 5)
+melhoraresul.nao.tempo.6 <- sum(melhoraresul.nao.tempo$tempogasto == 6)
+melhoraresul.nao.tempo.7 <- sum(melhoraresul.nao.tempo$tempogasto == 7)
+melhoraresul.nao.tempo.8 <- sum(melhoraresul.nao.tempo$tempogasto == 8)
+melhoraresul.nao.tempo.9 <- sum(melhoraresul.nao.tempo$tempogasto == 9)
+
+#note que melhoraresul.nao.tempo.4, melhoraresul.nao.tempo.5 e melhoraresul.nao.tempo.8 são iguais a 0  
+legenda_tempo_nao <- c("de 5 a 10 minutos", 
+                  "de 10 a 30 minutos",
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+
+chart_nao <- c(melhoraresul.nao.tempo.2,
+          melhoraresul.nao.tempo.3, 
+          melhoraresul.nao.tempo.6,
+          melhoraresul.nao.tempo.7,
+          melhoraresul.nao.tempo.9)
+
+pct <- round(chart_nao/sum(chart_nao)*100, digits = 1)
+pct <- paste(pct,"%",sep="")
+```
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=5, out.width = '90%'}
+pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que NÃO acreditam na melhoria \ndo ensino através das mídias sociais")
+legend("topright", 
+       title="Tempo gasto usando mídias sociais",
+       legenda_tempo_nao, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       cex=0.90)
+```
+
+***
+Podemos ressaltar dois pontos importantes:
+
+- A maioria absoluta dos que defendem as mídias como ferramenta usa as mesmas por pelo menos 1 hora ao dia (quase 95%!!) e que TODOS usam por meia hora ou mais
+
+- Embora os tempos dos que não acreditam nas redes sociais como ferramenta de consumo sejam distribuídos, metade não usa redes sociais por mais de 30 minutos no dia!
+
+
+```{r, echo=FALSE, warning=FALSE}
+all_nao = c(melhoraresul.nao.tempo.1,
+            melhoraresul.nao.tempo.2,
+            melhoraresul.nao.tempo.3,
+            melhoraresul.nao.tempo.4,
+            melhoraresul.nao.tempo.5,
+            melhoraresul.nao.tempo.6,
+            melhoraresul.nao.tempo.7,
+            melhoraresul.nao.tempo.8,
+            melhoraresul.nao.tempo.9)
+
+all_sim = c(melhoraresul.sim.tempo.1,
+            melhoraresul.sim.tempo.2,
+            melhoraresul.sim.tempo.3,
+            melhoraresul.sim.tempo.4,
+            melhoraresul.sim.tempo.5,
+            melhoraresul.sim.tempo.6,
+            melhoraresul.sim.tempo.7,
+            melhoraresul.sim.tempo.8,
+            melhoraresul.sim.tempo.9)
+
+all = data.frame(
+  all_sim = all_sim,
+  all_nao = all_nao,
+  stringsAsFactors=F
+)
+all_matrix = as.matrix(all)
+colnames(all_matrix) <- c("all_sim","all_nao")
+
+legenda_all = c("Nenhum",
+                "5 a 10 minutos",
+                "10 a 30 minutos",
+                "30 a 60 minutos",
+                "1 a 2 horas", 
+                "2 a 3 horas",
+                "3 a 4 horas",
+                "4 a 5 horas",
+                "> 5horas")
+```
+***
+Para uma visão panorâmica da questão, apresentamos um terceiro gráfico:
+
+```{r, fig.align='center', echo=FALSE, fig.width=14, fig.height=8, out.width = '100%'}
+barplot(t(all[c('all_sim','all_nao')]), beside = TRUE,
+        cex.names=0.85,
+        xlab="Tempo gasto",
+        names.arg=legenda_all,
+        col=c("seagreen2","indianred1"),
+        ylim=c(0,12),
+        main="Você acredita nas mídias sociais como ferramentas para melhorar o aprendizado?")
+
+legend("topleft", inset=.015,
+       c("Sim","Não"), fill=c("seagreen2","indianred1"), text.font=2, cex=0.9)
+
+```
+
+***
+No gráfico fica evidente tanto a grandeza da opinião positiva sobre a negativa, quanto a relação de que as opiniões postivas tendem a se concentrar nos entrevistados que passam mais tempo _online_. 
+
+Dessa forma, verificamos que aqueles que tem mais "intimidade" com as redes tambem as vêm com potencial para o ensino.

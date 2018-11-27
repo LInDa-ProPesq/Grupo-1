@@ -36,11 +36,9 @@ legenda_analise <- paste(legenda_analise,"%",sep="")
 
 Embora o uso das redes sociais como apoio aos professores ainda divida opiniões, é de consentimento geral que o debate, nessa etapa da discussão, é essencial. Uma universidade pública como a UNESP compreende uma parcela de público diversificada e, portanto, muito importante para essa discussão.
 
-Pensando nisso, analisaremos então a questão na presente seção.
-
 ### Opinião dos participantes
 
-Aprofundando-se na opinião dos entrevistados, verificamos um aceno significativo, onde mais de 60% vê as redes sociais como uma opção interassante de ferramenta de ensino.
+Aprofundando-se na opinião dos entrevistados, verificamos um aceno significativo, onde mais de 60% vê as redes sociais como uma opção interassante de ferramenta a fim de melhorar o ensino.
 
 
 ```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
@@ -53,7 +51,7 @@ A informação, no entanto, diz pouco sobre a opinião do público da pesquisa a
 
 ### As respotas e o tempo
 
-Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que isso está intimamente ligado a maneira como eles vêm e entendem essas redes.
+Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que sua opinião está intimamente ligada a maneira como eles vêm e entendem essas redes.
 
 Como forma de analisar a questão apresentamos alguns gráficos que relacionam o tempo gasto dos entrevistados e sua opinião sobre o uso das mídias sociais.
 
@@ -86,10 +84,10 @@ pct <- paste(pct,"%",sep="")
 
 ```
 
-Abaixo apresentamos dois gráficos. O primeiro diz respeito tempo gasto pelos que vêm as mídias sociais como ferramenta de ensino postitivamente. O segundo, por sua vez, trata justamente do oposto; nele verificamos o tempo daqueles que não depositam confiança nas mídias sociais no auxílio ao ensino.
+Abaixo apresentamos dois gráficos. O primeiro diz respeito tempo gasto pelos que vêm as mídias sociais como ferramenta de ensino postitivamente. O segundo, por sua vez, trata justamente do oposto; nele verificamos o tempo daqueles que não depositam confiança nas mídias sociais no auxílio ao ensino, a fim de melhorá-lo.
 
 ```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
-pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que acreditam nas mídias sociais \ncomo ferramenta de ensino")
+pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que acreditam na melhoria \ndo ensino através das mídias sociais")
 legend("topleft",
        title="Tempo gasto usando mídias sociais",
        legenda_tempo_sim, 
@@ -126,7 +124,7 @@ pct <- paste(pct,"%",sep="")
 ```
 
 ```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
-pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que NÃO acreditam nas mídias sociais \ncomo ferramenta de ensino")
+pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que NÃO acreditam na melhoria \ndo ensino através das mídias sociais")
 legend("topright", 
        title="Tempo gasto usando mídias sociais",
        legenda_tempo_nao, 
@@ -193,4 +191,4 @@ legend("topleft", inset=.015,
 
 ```
 
-No gráfico fica evidente tanto a grandeza da opinião positiva sobre a negativa, quanto a relação de que as opiniões postivas tendem a se concentrar nos entrevistados que passam mais tempo _online_.
+No gráfico fica evidente tanto a grandeza da opinião positiva sobre a negativa, quanto a relação de que as opiniões postivas tendem a se concentrar nos entrevistados que passam mais tempo _online_. Dessa forma, verificamos que aqueles que tem mais "intimidade" com as redes tambem as vêm com potencial para o ensino.
