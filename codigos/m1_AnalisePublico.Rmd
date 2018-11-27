@@ -18,8 +18,8 @@ header-includes:
 \pagebreak
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
-#path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
-path <- "/home/vina/Documentos/Projetos/Grupo-1/"
+path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
+#path <- "/home/vina/Documentos/Projetos/Grupo-1/"
 path <- paste(path, "/dados/structured_csv.csv", sep = "")
 #install.packages("readxl", repos = "http://cran.us.r-project.org")
 #install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
@@ -166,7 +166,7 @@ pie(dados_trab,labels = legenda_trab, col=cor(qtd),
 Podemos constatar que as pessoas com vínculos remunerados totalizam 37 e, em contrapartida, 24 estão desempregadas. Interessante analisar que 60,65% dos entrevistados possuem remuneração.
 
 ### Estado Civil e Descendentes
-A pesquisa também procurou compreender o estado civil e se o público possuía filhos ou não. Dentro das análises, podemos perceber que apenas *uma das pessoas entrevistadas estava casada* e apenas *uma pessoa possui um filho*. Todo o restante encontrasse solteiro e sem filhos.
+A pesquisa também procurou compreender o estado civil e se o público possuía filhos ou não. Dentro das análises, podemos perceber que apenas *uma das pessoas entrevistadas estava casada* e apenas *uma pessoa possui um filho*. Todo o restante encontra-se solteiro e sem filhos.
 
 # Análises
 Nesse momento, mostraremos os dados bem como suas análises
