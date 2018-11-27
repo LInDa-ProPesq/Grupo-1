@@ -1,6 +1,6 @@
 ---
 title: "An√°lise do corpo discente da UNESP Bauru"
-author: "Ana CecÌlia, Elis‚ngela Santos, Jo„o Albino, Matheus Lopes, Pedro Silva e VinÌcius Camargo"
+author: "Ana Cec?lia, Elis?ngela Santos, Jo?o Albino, Matheus Lopes, Pedro Silva e Vin?cius Camargo"
 mainfont: Arial
 sansfont: Arial
 output: ioslides_presentation
@@ -20,9 +20,9 @@ Nosso projeto foi baseado na an√°lise populacional coletada pelos alunos da turm
 
 Desta maneira, durante o projeto coletamos dados de alunos da institui√ß√£o para que pud√©ssemos responder quest√µes sobre utiliza√ß√£o de dispositivos informacionais em rela√ß√£o ao ambiente acad√™mico e profissional.
 
-## Estagi·rios e LinkedIn
+## Estagi√°rios e LinkedIn
 
-Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se os estagi·rios, e entre estes, a maioria utiliza a rede social LinkedIn.
+Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se os estagi?rios, e entre estes, a maioria utiliza a rede social LinkedIn.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #usando xls
 data <- df
@@ -50,7 +50,7 @@ pie(dados,labels = legenda,
 
 ## Jornada Parcial e LinkedIn
 
-Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se as pessoas que fazem jornada parcial, e entre estes, h· uma divis„o igualit·ria entre quem utiliza e quem n„o utiliza a rede social LinkedIn.
+Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se as pessoas que fazem jornada parcial, e entre estes, h√° uma divis√£o igualit√°ria entre quem utiliza e quem n√£o utiliza a rede social LinkedIn.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #usando xls
 data <- df
