@@ -1,6 +1,6 @@
 ---
 title: "Análise do corpo discente da UNESP Bauru"
-author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinícius Camargo"
+author: "Ana Cec�lia, Elis�ngela Santos, Jo�o Albino, Matheus Lopes, Pedro Silva e Vin�cius Camargo"
 mainfont: Arial
 sansfont: Arial
 output: ioslides_presentation
@@ -20,10 +20,9 @@ Nosso projeto foi baseado na análise populacional coletada pelos alunos da turm
 
 Desta maneira, durante o projeto coletamos dados de alunos da instituição para que pudéssemos responder questões sobre utilização de dispositivos informacionais em relação ao ambiente acadêmico e profissional.
 
-## SLIDE UM AQUI
+## Estagi�rios e LinkedIn
 
-## LISA
-
+Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se os estagi�rios, e entre estes, a maioria utiliza a rede social LinkedIn.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #usando xls
 data <- df
@@ -49,8 +48,9 @@ pie(dados,labels = legenda,
     main="Estagiários que usam LinkedIn")
 ```
 
-##LISA
+## Jornada Parcial e LinkedIn
 
+Analisamos que entre as maiores porcentagens entre os empregados entrevistados, encontram-se as pessoas que fazem jornada parcial, e entre estes, h� uma divis�o igualit�ria entre quem utiliza e quem n�o utiliza a rede social LinkedIn.
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #usando xls
 data <- df
@@ -121,7 +121,7 @@ pie(mr, labels = legenda_analise, col = c("indianred1","seagreen2","peachpuff1")
 A informação, no entanto, diz pouco sobre a opinião do público da pesquisa acerca do tema, deixando questões como por responder. 
 
 ***
-### As respotas e o tempo
+### As respostas e o tempo
 
 Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que sua opinião está intimamente ligada a maneira como eles vêm e entendem essas redes.
 
