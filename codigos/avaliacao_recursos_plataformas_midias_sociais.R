@@ -140,9 +140,10 @@ valores[is.na(valores)] <- 0
 dados = data.frame(recursos, avaliacoes, valores)
 
 pdf("graficos/avaliacao_recursos_plataformas.pdf")
+png("graficos/avaliacao_recursos_plataformas.png")
 
 ggplot(dados, aes(fill=avaliacoes, y=valores, x=recursos)) +
-  geom_bar(stat="identity") + labs(x = "Recursos", y = "Quantidades", fill = "AvaliaÃ§Ãµes") +
+  geom_bar(stat="identity") + labs(x = "Recursos", y = "Quantidades", fill = "Avaliações") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 dev.off()
