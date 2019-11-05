@@ -11,7 +11,7 @@ library("reshape2")
 library("RColorBrewer")
 library("readxl")
 #df <- read_excel("/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1/dados/umses_graduacao_2018_vtidy.xlsx")
-df <- read_excel("dados/umses_graduacao_2018_vtidy.xlsx")
+df <- read_excel("C:/GitHub/Grupo-1/dados/umses_graduacao_2018_vtidy.xlsx")
 cor <- function(numero_dados) {
   d=brewer.pal(n = numero_dados, name = "RdBu")
   return(d)

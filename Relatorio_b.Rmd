@@ -1,0 +1,1058 @@
+
+---
+title: <center>Análise sobre as influências das mídias sociais sobre discentes da instituição de nível superior UNESP Bauru</center>
+author: "Ana Cecília, Elisangela Santos, João Albino, Matheus Lopes, Pedro Silva e Vinícius Camargo"
+output: pdf_document
+mainfont: Arial
+sansfont: Arial
+fig_crop: false
+toc: true
+fontsize: 14pt
+geometry: margin=0.5in
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{sectsty} \sectionfont{\centering \emph}
+
+---
+
+\pagebreak
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+#path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
+#path <- "/home/vina/Documentos/Projetos/Grupo-1/"
+#path <- paste(path, "/dados/structured_csv.csv", sep = "")
+path <- ("dados/structured_csv.csv")
+#install.packages("readxl", repos = "http://cran.us.r-project.org")
+#install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+library("reshape2")
+library("RColorBrewer")
+library("readxl")
+library("csvread")
+library("ggplot2")
+data <- read.csv(path, header = TRUE)
+
+cor <- function(numero_dados) {
+  d=brewer.pal(n = numero_dados, name = "RdBu")
+  return(d)
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE, cache=FALSE, echo=FALSE}
+library(rmarkdown)
+```
+
+# Introdução
+
+Segundo Fawcett e Waller, "a ciência de dados é a aplicação de métodos quantitativos e qualitativos para resolver problemas relevantes e prever resultados. Uma das principais revelações de hoje, com a vasta e crescente quantidade de dados, é que o conhecimento e a análise do domínio não podem ser separados".
+
+Tendo em vista, o crescimento assíduo de tal temática, procuramos aplicar alguns conceitos da definição. Para tanto, Nosso projeto foi baseado na análise populacional coletada pelos alunos da turma de Ciência de Dados no segundo semestre de 2018. O objetivo principal do trabalho era responder a questão: *Quais são as influências das mídias sociais sobre discentes da instituição de nível superior UNESP-Bauru-SP?*
+
+No decorrer do processo, coletamos, tratamos e, por fim, apresentaremos algumas análises e conclusões sobre os dados coletados.
+
+## ANÁLISE POPULACIONAL
+
+Os dados foram coletados pelos alunos da turma. O projeto contou com a coleta de dados sobre **61 pessoas**. 
+
+### Sobre o Gênero
+
+```{r, echo=FALSE, warning=FALSE}
+#atribuindo os valores da coluna genero
+coluna_genero <- data$'genero'
+
+# Dicionário de dados
+  # Não informado = 1
+  # Masculino = 2
+  # Feminino = 3
+
+nao_informado <- sum(coluna_genero == '1')
+masculino <- sum(coluna_genero == '2')
+feminino <- sum(coluna_genero == '3')
+total <- masculino + feminino + nao_informado
+
+dados <- c(nao_informado, masculino, feminino)
+legenda <- c("Não Informado", "Masculino", "Feminino")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, fig.align='center', echo=FALSE, out.width = '45%'}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="Gênero Público")
+```
+Como podemos ver, a amostra é composta majoritariamente por homens. Dessa maneira, tivemos 37 homens e 24 mulheres. Nenhum participante assinalou assinalou como "Não quero informar".
+
+### Sobre a idade
+
+Dentro da pesquisa, a resposta sobre idade foi dividida em classes. Sendo: 
+- A: Entre 16 e 20 anos
+- B: Entre 21 e 25 anos
+- C: Entre 26 e 30 anos
+- D: Entre 30 e 35 anos
+- E: Entre 36 e 40 anos
+- F: Acima de 40 anos
+
+```{r, echo=FALSE, warning=FALSE}
+coluna_idade <- data$'idade'
+i16_20 <- sum(coluna_idade == '1')
+i21_25 <- sum(coluna_idade == '2')
+i26_30 <- sum(coluna_idade == '3')
+i30_35 <- sum(coluna_idade == '4')
+i36_40 <- sum(coluna_idade == '5')
+i41 <- sum(coluna_idade == '6')
+dados_idade <- c(i16_20, i21_25, i26_30, i30_35, i36_40, i41)
+#Gráfico de barras
+g1 <- "Entre 16 e 20 anos:"
+g2 <- "Entre 21 e 25 anos:"
+g3 <- "Entre 26 e 30 anos:"
+g4 <- "Entre 30 e 35 anos:"
+g5 <- "Entre 36 e 40 anos:"
+g6 <- "Acima de 40 anos:"
+legenda_idade <- c(g1, g2, g3, g4, g5, g6)
+qtd <- length(legenda_idade)
+legenda_idade <- paste(legenda_idade, dados_idade, "pessoas")
+```
+
+```{r, fig.align='center', echo=FALSE, out.width = '50%'}
+barplot(dados_idade, legend=legenda_idade, main="Idade Público", 
+        xlab="Idade",col=cor(qtd),
+        ylim = c(0, 1.5* max(dados_idade, na.rm = T)))
+```
+
+Como podemos ver no gráfico, existem dois grandes grupos de idade. Aproximadamente, 95% das pessoas consultadas estão entre 16 e 25 anos, ou seja, nasceram entre 1993 e o início dos anos 2000. Isso é importante para pesquisa, pois a geração em análise nasceu no período de maior crescimento dos dispositivos computacionais de informação, seja com o surgimentos do smartphones, a proliferação do uso de computadores pessoais e o crescimento das redes sociais.
+
+Logo, será importante analisar a maneira a qual esse grupo em análise utiliza as redes sociais, pois é uma das gerações que mais teve acesso a esses dispositivos.
+
+### Sobre remuneração
+
+Dentro da pesquisa também, consultamos sobre os vínculos empregatícios e ocupações profissionais das pessoas.
+
+```{r, echo=FALSE, warning=FALSE}
+coluna_trab <- data$'trabalha'
+des <- sum(coluna_trab == '1')
+jorn_p <- sum(coluna_trab == '2')
+jorn_i <- sum(coluna_trab == '3')
+estag <- sum(coluna_trab == '4')
+conta_pro <- sum(coluna_trab == '5')
+temp_afas <- sum(coluna_trab == '6')
+aposent <- sum(coluna_trab == '7')
+bolsi <- sum(coluna_trab == '8')
+dados_trab <- c(des, jorn_p, jorn_i, estag, bolsi)
+
+total_empregados <- jorn_p + jorn_i + estag + conta_pro + bolsi
+p <- total_empregados/(total_empregados + des)
+#Gráfico de barras
+g1 <- "Desempregado:"
+g2 <- "Jornada parcial:"
+g3 <- "Jornada integral:"
+g4 <- "Estagiário:"
+g8 <- "Bolsista Capes:"
+legenda_trab <- c(g1, g2, g3, g4, g8)
+qtd <- length(legenda_trab)
+```
+
+```{r, fig.align='center', echo=FALSE, out.width = '60%'}
+pct <- round(dados_trab/sum(dados_trab)*100)
+legenda_trab <- paste(legenda_trab, pct)
+legenda_trab <- paste(legenda_trab,"%",sep="")
+pie(dados_trab,labels = legenda_trab, col=cor(qtd),
+    main="Ocupações")
+```
+
+Podemos constatar que as pessoas com vínculos remunerados totalizam 37 e, em contrapartida, 24 estão desempregadas. Interessante analisar que 60,65% dos entrevistados possuem remuneração.
+
+### Estado Civil e Descendentes
+A pesquisa também procurou compreender o estado civil e se o público possuía filhos ou não. Dentro das análises, podemos perceber que apenas *uma das pessoas entrevistadas estava casada* e apenas *uma pessoa possui um filho*. Todo o restante encontra-se solteiro e sem filhos.
+
+# Análises
+Nesse momento, mostraremos os dados bem como suas análises
+
+## Dificuldades de utilização de mídias sociais
+Como podemos perceber, o gráfico apresentado demonstra que as principais dificuldades enfrentadas pelos usuários estão relacionadas a distração que as mídias sociais podem trazer, além do possível uso indevido das plataformas dentro de sala de aula.
+
+Problemas referentes a distração em sala de aula indicam uma preocupação com a liberdade oferecida aos alunos durante a utilização dessas plataformas para fins acadêmicos. Por apresentarem milhares de conteúdos interativos, as redes sociais podem ser fonte de distrações se não forem delimitados os acessos durante a aula.
+
+Mesmo com algumas dificuldades apontadas pelos entrevistados, tais dificuldades se mostram superáveis, não representando um empecilho para a aplicação das mídias sociais no meio educacional.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df <- data
+
+distracao <- sum(df$distracao == '1')
+usoindev <- sum(df$usoindev == '1')
+prejintera <- sum(df$prejintera == '1')
+bulling <- sum(df$bulling == '1')
+continadeq <- sum(df$continadeq == '1')
+
+labels <- c(
+  "Distração em sala de aula",
+  "Uso indevido",
+  "Problemas de interação entre professores e alunos",
+  "Cyberbullying",
+  "Conteúdo inadequado"
+)
+
+dados <- c(
+  distracao, usoindev, prejintera, bulling, continadeq
+)
+
+legenda = paste(labels, " - ", dados)
+quantidade = length(labels)
+```
+
+```{r, fig.align='center', echo=FALSE, out.width = '60%'}
+barplot(dados, col=cor(quantidade), main="Dificuldades de uso", ylim = c(0, 60), legend = legenda)
+```
+
+## Análise de motivos de utilização com tempo de uso
+
+Como podemos verificar com o gráfico a seguir, a maior parte dos entrevistados despende grande parcela de tempo na busca por conteúdos. Esse fator demonstra-se favorável a utilização de mídias sociais na divulgação de assuntos referentes à disciplinas acadêmicas.
+
+Outro motivo com grande período de utilização associado é de "Preencher tempo". Isto também poderia ser utilizado como argumento para divulgação de conteúdo educacional, visto que, em horários vagos, os usuários poderiam ter acesso a informações acadêmicas, preenchendo o tempo com a obtenção de conhecimento.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df <- data
+
+distracao <- sum(df$distracao == '1')
+usoindev <- sum(df$usoindev == '1')
+prejintera <- sum(df$prejintera == '1')
+bulling <- sum(df$bulling == '1')
+continadeq <- sum(df$continadeq == '1')
+
+# Motivo - contato
+contato <- df[df$contato == '1',]
+tempos_contato <- c(
+  sum(contato$tempogasto == '2'),
+  sum(contato$tempogasto == '3'),
+  sum(contato$tempogasto == '4'),
+  sum(contato$tempogasto == '5'),
+  sum(contato$tempogasto == '6'),
+  sum(contato$tempogasto == '7'),
+  sum(contato$tempogasto == '8'),
+  sum(contato$tempogasto == '9')
+)
+
+# Motivo - atualizado
+atualizado <- df[df$atualizado == '1',]
+tempos_atualizado <- c(
+  sum(atualizado$tempogasto == '2'),
+  sum(atualizado$tempogasto == '3'),
+  sum(atualizado$tempogasto == '4'),
+  sum(atualizado$tempogasto == '5'),
+  sum(atualizado$tempogasto == '6'),
+  sum(atualizado$tempogasto == '7'),
+  sum(atualizado$tempogasto == '8'),
+  sum(atualizado$tempogasto == '9')
+)
+
+# Motivo - preencher
+preencher <- df[df$preencher == '1',]
+tempos_preencher <- c(
+  sum(preencher$tempogasto == '2'),
+  sum(preencher$tempogasto == '3'),
+  sum(preencher$tempogasto == '4'),
+  sum(preencher$tempogasto == '5'),
+  sum(preencher$tempogasto == '6'),
+  sum(preencher$tempogasto == '7'),
+  sum(preencher$tempogasto == '8'),
+  sum(preencher$tempogasto == '9')
+)
+
+# Motivo - encontrar
+encontrar <- df[df$encontrar == '1',]
+tempos_encontrar <- c(
+  sum(encontrar$tempogasto == '2'),
+  sum(encontrar$tempogasto == '3'),
+  sum(encontrar$tempogasto == '4'),
+  sum(encontrar$tempogasto == '5'),
+  sum(encontrar$tempogasto == '6'),
+  sum(encontrar$tempogasto == '7'),
+  sum(encontrar$tempogasto == '8'),
+  sum(encontrar$tempogasto == '9')
+)
+
+# Motivo - compopiniao
+compopiniao <- df[df$compopiniao == '1',]
+tempos_compopiniao <- c(
+  sum(compopiniao$tempogasto == '2'),
+  sum(compopiniao$tempogasto == '3'),
+  sum(compopiniao$tempogasto == '4'),
+  sum(compopiniao$tempogasto == '5'),
+  sum(compopiniao$tempogasto == '6'),
+  sum(compopiniao$tempogasto == '7'),
+  sum(compopiniao$tempogasto == '8'),
+  sum(compopiniao$tempogasto == '9')
+)
+
+# Motivo - compfoto
+compfoto <- df[df$compfoto == '1',]
+tempos_compfoto <- c(
+  sum(compfoto$tempogasto == '2'),
+  sum(compfoto$tempogasto == '3'),
+  sum(compfoto$tempogasto == '4'),
+  sum(compfoto$tempogasto == '5'),
+  sum(compfoto$tempogasto == '6'),
+  sum(compfoto$tempogasto == '7'),
+  sum(compfoto$tempogasto == '8'),
+  sum(compfoto$tempogasto == '9')
+)
+
+# Motivo - amigosja
+amigosja <- df[df$amigosja == '1',]
+tempos_amigosja <- c(
+  sum(amigosja$tempogasto == '2'),
+  sum(amigosja$tempogasto == '3'),
+  sum(amigosja$tempogasto == '4'),
+  sum(amigosja$tempogasto == '5'),
+  sum(amigosja$tempogasto == '6'),
+  sum(amigosja$tempogasto == '7'),
+  sum(amigosja$tempogasto == '8'),
+  sum(amigosja$tempogasto == '9')
+)
+
+# Motivo - profnetwork
+profnetwork <- df[df$profnetwork == '1',]
+tempos_profnetwork <- c(
+  sum(profnetwork$tempogasto == '2'),
+  sum(profnetwork$tempogasto == '3'),
+  sum(profnetwork$tempogasto == '4'),
+  sum(profnetwork$tempogasto == '5'),
+  sum(profnetwork$tempogasto == '6'),
+  sum(profnetwork$tempogasto == '7'),
+  sum(profnetwork$tempogasto == '8'),
+  sum(profnetwork$tempogasto == '9')
+)
+
+# Motivo - novaamizade
+novaamizade <- df[df$novaamizade == '1',]
+tempos_novaamizade <- c(
+  sum(novaamizade$tempogasto == '2'),
+  sum(novaamizade$tempogasto == '3'),
+  sum(novaamizade$tempogasto == '4'),
+  sum(novaamizade$tempogasto == '5'),
+  sum(novaamizade$tempogasto == '6'),
+  sum(novaamizade$tempogasto == '7'),
+  sum(novaamizade$tempogasto == '8'),
+  sum(novaamizade$tempogasto == '9')
+)
+
+# Motivo - compdetalhe
+compdetalhe <- df[df$compdetalhe == '1',]
+tempos_compdetalhe <- c(
+  sum(compdetalhe$tempogasto == '2'),
+  sum(compdetalhe$tempogasto == '3'),
+  sum(compdetalhe$tempogasto == '4'),
+  sum(compdetalhe$tempogasto == '5'),
+  sum(compdetalhe$tempogasto == '6'),
+  sum(compdetalhe$tempogasto == '7'),
+  sum(compdetalhe$tempogasto == '8'),
+  sum(compdetalhe$tempogasto == '9')
+)
+
+# Motivo - outros_motivos
+outros_motivos <- df[df$outros_motivos == '1',]
+tempos_outros_motivos <- c(
+  sum(outros_motivos$tempogasto == '2'),
+  sum(outros_motivos$tempogasto == '3'),
+  sum(outros_motivos$tempogasto == '4'),
+  sum(outros_motivos$tempogasto == '5'),
+  sum(outros_motivos$tempogasto == '6'),
+  sum(outros_motivos$tempogasto == '7'),
+  sum(outros_motivos$tempogasto == '8'),
+  sum(outros_motivos$tempogasto == '9')
+)
+
+tempos_motivos <- data.frame(
+  "Tempos" = c('2', '3', '4', '5', '6', '7', '8', '9'),
+  "Contato" = tempos_contato,
+  "Atualizado" = tempos_atualizado,
+  "Preenhcer" = tempos_preencher,
+  "Encontrar" = tempos_encontrar,
+  "Comp. Opinião" = tempos_compopiniao,
+  "Comp. Foto" = tempos_compfoto,
+  "Amigos" = tempos_amigosja,
+  "Prof Net" = tempos_profnetwork,
+  "Nova amizade" = tempos_novaamizade,
+  "Comp. detalhe" = tempos_compdetalhe,
+  "Outros" = tempos_outros_motivos
+)
+
+motivos = c(
+  rep("Manter contato", 8), rep("Manter-se atualizado", 8), rep("Preencher tempo", 8),
+  rep("Encontrar conteúdo", 8), rep("Compartilhar opiniões", 8), rep("Compartilhar fotos", 8),
+  rep("Amigos já estão na mídia", 8), rep("Networking", 8), rep("Conhecer pessoas", 8),
+  rep("Assuntos de trabalho", 8), rep("Outros motivos", 8)
+) # 8 tempos
+
+tempos = rep(c(
+  'de 5 a 10 minutos', 
+  'de 10 a 30 minutos', 
+  'de 30 minutos a 1 hora',
+  'de 1 a 2 horas',
+  'de 2 a 3 horas',
+  'de 3 a 4 horas',
+  'de 4 a 5 horas',
+  'mais de 5 horas'
+), 11) # 11 motivos
+
+valores = c(
+  tempos_contato, tempos_atualizado, tempos_preencher, tempos_encontrar, tempos_compopiniao,
+  tempos_compfoto, tempos_amigosja, tempos_profnetwork, tempos_novaamizade, tempos_compdetalhe,
+  tempos_outros_motivos
+)
+valores[is.na(valores)] <- 0
+
+dados = data.frame(motivos, tempos, valores)
+```
+
+```{r, fig.align='center', echo=FALSE, out.width = '60%'}
+ggplot(dados, aes(fill=tempos, y=valores, x=motivos)) +
+  geom_bar(stat="identity") + labs(x = "Motivos de contato", y = "Quantidades", fill = "Tempos") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+## Nível de utilização geral de cada mídia social
+
+A partir da formatação dos dados obtidos pelo questionário, conseguimos identificar quais as mídias sociais mais utilizadas pelos entrevistados e quais estão em maior desuso.
+Como está exposto no gráfico abaixo, as 3 mídias sociais mais utilizadas em ordem decrescente são: WhatsApp, YouTube e Facebook.
+
+Já as 3 mídias sociais menos utilizadas são: Tumblr, Snapchat e Pinterest.
+
+Interessante salientar que as mídias sociais informadas através da opção "Outras" foram: Telegram, Moodle, Steam, Skype, Messenger, GitHub, Slack e StackOverFlow. 
+
+```{r, echo=FALSE, warning=FALSE}
+
+
+#GRÁFICO DE USO DAS PLATAFORMAS
+coluna_facebook <- sum(data$facebook)
+coluna_twitter <- sum(data$twitter)
+coluna_whatsapp <- sum(data$whatsapp)
+coluna_linkedin <- sum(data$linkedin)
+coluna_youtube <- sum(data$youtube)
+coluna_instagram <- sum(data$instagram)
+coluna_snapchat <- sum(data$snapchat)
+coluna_tumblr <- sum(data$tumblr)
+coluna_pinterest <- sum(data$pinterest)
+outras_plataf <- 0
+for (i in data$outras_plataformas){
+  if(!is.na(i)){
+    outras_plataf <- outras_plataf+1
+  }
+}
+
+coluna_outras <- outras_plataf
+
+#formatando para criar gráfico
+dados <- c(coluna_facebook, coluna_twitter, coluna_whatsapp, coluna_linkedin, coluna_youtube, 
+           coluna_instagram, coluna_snapchat, coluna_tumblr, coluna_pinterest, coluna_outras)
+
+legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagram", "Snapchat", "Tumblr", "Pinterest", "Outras")
+
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+
+```
+
+
+```{r, fig.align='center', echo=FALSE, out.width = '60%'}
+barplot(dados, main="Uso de plataformas de Redes Sociais", col = rainbow(20), horiz=TRUE,
+        width = 500, xlim = c(0,70),cex.names=0.8,
+        xlab="Qtde de entrevistados que são usuários",
+        las=1,
+        names.arg=legenda)
+```
+
+Desta forma, caso necessário realizar o compartilhamento de materiais, por exemplo, entre docentes e discentes através de midias sociais indica-se o compartilhamento de links em grupos de WhatsApp ou criação e divulgação de vídeos pelos chamados canais da plataforma YouTube.
+
+## Tempo de uso das mídias sociais por dia
+
+O celular, nas últimas 2 décadas, passou a ser um dos objetos mais utilizados pelos humanos. Com a evolução e popularização dos telefones móveis, o uso diário tornou-se comum. Devido a isso, as redes sociais também receberam um grande aumento no número de usuários.
+
+No gráfico abaixo é possível visualizar o tempo de uso de redes sociais por dia útil. Consideramos que esse uso é feito tanto através de computadores ou notebooks quanto por celulares.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$tempogasto)
+slices <- c(tabela)
+lbls <- c("Nenhum/Não uso -", "00:05 a 00:10 -", "00:10 a 00:30 -", "00:30 a 01:00 -",
+          "01:00 a 02:00 -","02:00 a 03:00 -","03:00 a 04:00 -","04:00 a 05:00 -","mais de 05:00 -");
+
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+```
+
+
+```{r, fig.align='center', echo=FALSE, out.width = '60%'}
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+    main="Tempo de uso das mídias sociais por dia", radius = 1, init.angle = 0, border = 1)
+
+```
+
+Vemos que mais de 60% dos entrevistados navegam pelas redes sociais pelo menos por 1 hora por dia. A frequência de uso mais indicada é a de 1 a 2 horas de redes sociais por dia.
+
+## Opinião dos entrevistados sobre o uso de mídias sociais por professores
+Através da pergunta número 4 do formulário obteu-se a aceitação sobre do uso de redes sociais pelos professores do Ensino Superior.
+
+Veja no gráfico abaixo o compilado das respostas obtidas.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$usoacademico)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Sim, \nporém com restrições", "Não sei") 
+```
+
+```{r, echo=FALSE, fig.align='center', out.width = '50%'}
+barplot(counts, main="Mídia social é uma ferramenta que \npode/deve ser utilizada pelos professores?", space=1, ylim=c(0,40),
+        xlab="Opinião dos entrevistados", names.arg = lbls, las=1, col = rainbow(15))
+```
+
+Baseado no resultado acima, percebemos o incentivo por parte dos entrevistados (todos alunos do Ensino Superior) para que os professores utilizem redes sociais. Entretanto, como a questão não menciona com qual objetivo os professores utilizariam as redes sociais, ainda não é possível concluir se os alunos apoiam o compartilhamento de informações acadêmicas através das plataformas.
+
+## Análise da possibilidade de integração entre docentes e discentes através de redes sociais
+
+Na pergunta de número 5 do questionário, os entrevistados foram indagados se a melhor forma de aproximação entre alunos e professores é através de redes sociais.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$profchegaal)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE, fig.align='center', out.width = '60%'}
+barplot(counts, main="A mídia social é a melhor forma dos professores \nse aproximarem de seus alunos?", space=1,, ylim=c(0,30), xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(8))
+```
+
+O resultado obtido acima é surpreendente.
+
+Uma vez que grande parte dos alunos apoiam o uso de redes sociais pelos seus professores, o esperado era que a maioria considerasse as mídias sociais como uma das melhores formas de integração; o que não está visível no gráfico acima.
+Cerca de 22% dos entrevistados consideram que a melhor forma de aproximação de alunos aos seus professores não é através das redes sociais. Neste caso, seria interessante aprofundarmos a questão para entender os motivos por esta escolha, podendo envolver questões de privacidade ou insatisfação da mesclagem de vida pessoal e vida acadêmica.
+
+
+## Sobre a relação de melhores resultados de alunos com a integração de mídias sociais às aulas e/ou atividades
+
+Na sexta pergunta, é questionada a possibilidade de alcance de melhores resultados dos alunos, caso as redes sociais possuírem integração com as aulas e atividades estudantis.
+Imagina-se o uso das plataformas para divulgação de material de estudo, atividades e prazos para conclusão.
+
+Veja em seguida os resultados.
+
+```{r, echo=FALSE, warning=FALSE}
+tabela <- table(data$melhoraresul)
+counts <- c(tabela)
+lbls <- c("Não","Sim", "Não sei / Não tenho opinião")
+```
+
+```{r, echo=FALSE, fig.align='center', out.width = '55%'}
+barplot(counts, main="Os alunos alcançarão melhores resultados se as mídias sociais\n estiverem integradas às aulas e/ou atividades?", space=1,, ylim=c(0,40), xlab="Opinião dos entrevistados", names.arg = lbls, cex.names = 0.9, las=1, col = rainbow(7))
+
+```
+
+Percebemos que quase metade dos entrevistados julgam que os alunos alcançariam melhores resultados com a integração de aulas com as mídias sociais.
+
+Portanto, mesmo que seja necessário encontrar outros meios de aproximar alunos de seus professores(vide resultado da pergunta 5), é recomendado o uso das plataformas para proporcionar mais ganhos aos alunos, seja disponbilizando materiais ou recebendo entregas de atividades, por exemplo.
+
+## As redes sociais podem melhorar os resultados dos alunos?
+
+Embora o uso das redes sociais como apoio aos professores ainda divida opiniões, é de consentimento geral que o debate, nessa etapa da discussão, é essencial. Uma universidade pública como a UNESP compreende uma parcela de público diversificada e, portanto, muito importante para essa discussão.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df <- data
+melhoraresul = df$melhoraresul
+#1.Não
+#2.Sim
+#3.Não sei / Não tenho opinião
+
+melhoraresul.nao <- sum(melhoraresul == '1')
+melhoraresul.sim <- sum(melhoraresul == '2')
+melhoraresul.nao_sei <- sum(melhoraresul == '3')
+melhoraresul.nao.tempo = subset(df, df$melhoraresul == 1,select=c("tempogasto"))
+melhoraresul.sim.tempo = subset(df, df$melhoraresul == 2,select=c("tempogasto"))
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+mr = c(melhoraresul.nao, melhoraresul.sim, melhoraresul.nao_sei)
+legenda_analise <- c("Não", "Sim", "Não sei / Não tenho opinião")
+qtd <- length(legenda_analise)
+pct <- round(mr/sum(mr)*100, digits = 1)
+legenda_analise <- paste(legenda_analise, pct)
+legenda_analise <- paste(legenda_analise,"%",sep="")
+```
+
+### Opinião dos participantes
+
+Aprofundando-se na opinião dos entrevistados, verificamos um aceno significativo, onde mais de 60% vê as redes sociais como uma opção interassante de ferramenta a fim de melhorar o ensino.
+
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(mr, labels = legenda_analise, col = c("indianred1","seagreen2","peachpuff1"),
+    main="Midias sociais integradas as aulas podem melhorar os resultados dos alunos?")
+```
+
+A informação, no entanto, diz pouco sobre a opinião do público da pesquisa acerca do tema, deixando questões como por responder. 
+
+
+### As respotas e o tempo
+
+Um ponto importante é a relação pessoal de uso que dos participantes têm com essas mídias, já que é sensato imaginar que sua opinião está intimamente ligada a maneira como eles vêm e entendem essas redes.
+
+Como forma de analisar a questão apresentamos alguns gráficos que relacionam o tempo gasto dos entrevistados e sua opinião sobre o uso das mídias sociais.
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.sim.tempo.1 <- sum(melhoraresul.sim.tempo$tempogasto == 1)
+melhoraresul.sim.tempo.2 <- sum(melhoraresul.sim.tempo$tempogasto == 2)
+melhoraresul.sim.tempo.3 <- sum(melhoraresul.sim.tempo$tempogasto == 3)
+melhoraresul.sim.tempo.4 <- sum(melhoraresul.sim.tempo$tempogasto == 4)
+melhoraresul.sim.tempo.5 <- sum(melhoraresul.sim.tempo$tempogasto == 5)
+melhoraresul.sim.tempo.6 <- sum(melhoraresul.sim.tempo$tempogasto == 6)
+melhoraresul.sim.tempo.7 <- sum(melhoraresul.sim.tempo$tempogasto == 7)
+melhoraresul.sim.tempo.8 <- sum(melhoraresul.sim.tempo$tempogasto == 8)
+melhoraresul.sim.tempo.9 <- sum(melhoraresul.sim.tempo$tempogasto == 9)
+
+#note que melhoraresul.sim.tempo.8 = 0
+legenda_tempo_sim <- c("de 30 minutos até 1 hora", 
+                  "de 1 a 2 horas", 
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+chart_sim <- c(melhoraresul.sim.tempo.4, 
+          melhoraresul.sim.tempo.5, 
+          melhoraresul.sim.tempo.6,
+          melhoraresul.sim.tempo.7,
+          melhoraresul.sim.tempo.9)
+
+qtd <- length(legenda_tempo_sim)
+pct <- round(chart_sim/sum(chart_sim)*100, digits = 1)
+pct <- paste(pct,"%",sep="")
+
+```
+
+Abaixo apresentamos dois gráficos. O primeiro diz respeito tempo gasto pelos que vêm as mídias sociais como ferramenta de ensino postitivamente. O segundo, por sua vez, trata justamente do oposto; nele verificamos o tempo daqueles que não depositam confiança nas mídias sociais no auxílio ao ensino, a fim de melhorá-lo.
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(chart_sim, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que acreditam na melhoria \ndo ensino através das mídias sociais")
+legend("topleft",
+       title="Tempo gasto usando mídias sociais",
+       legenda_tempo_sim, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       cex=0.90)
+```
+
+```{r, echo=FALSE, warning=FALSE}
+melhoraresul.nao.tempo.1 <- sum(melhoraresul.nao.tempo$tempogasto == 1)
+melhoraresul.nao.tempo.2 <- sum(melhoraresul.nao.tempo$tempogasto == 2)
+melhoraresul.nao.tempo.3 <- sum(melhoraresul.nao.tempo$tempogasto == 3)
+melhoraresul.nao.tempo.4 <- sum(melhoraresul.nao.tempo$tempogasto == 4)
+melhoraresul.nao.tempo.5 <- sum(melhoraresul.nao.tempo$tempogasto == 5)
+melhoraresul.nao.tempo.6 <- sum(melhoraresul.nao.tempo$tempogasto == 6)
+melhoraresul.nao.tempo.7 <- sum(melhoraresul.nao.tempo$tempogasto == 7)
+melhoraresul.nao.tempo.8 <- sum(melhoraresul.nao.tempo$tempogasto == 8)
+melhoraresul.nao.tempo.9 <- sum(melhoraresul.nao.tempo$tempogasto == 9)
+
+#note que melhoraresul.nao.tempo.4, melhoraresul.nao.tempo.5 e melhoraresul.nao.tempo.8 são iguais a 0  
+legenda_tempo_nao <- c("de 5 a 10 minutos", 
+                  "de 10 a 30 minutos",
+                  "de 2 a 3 horas", 
+                  "de 3 a 4 horas",
+                  "mais de 5 horas")
+
+chart_nao <- c(melhoraresul.nao.tempo.2,
+          melhoraresul.nao.tempo.3, 
+          melhoraresul.nao.tempo.6,
+          melhoraresul.nao.tempo.7,
+          melhoraresul.nao.tempo.9)
+
+pct <- round(chart_nao/sum(chart_nao)*100, digits = 1)
+pct <- paste(pct,"%",sep="")
+```
+
+```{r, fig.align='center', echo=FALSE, fig.width=12, fig.height=6, out.width = '80%'}
+pie(chart_nao, labels = pct, col=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), main="Tempo gasto pelos que NÃO acreditam na melhoria \ndo ensino através das mídias sociais")
+legend("topright", 
+       title="Tempo gasto usando mídias sociais",
+       legenda_tempo_nao, 
+       fill=c("lightcyan1", "lightgoldenrod1", "lightpink", "lightskyblue1","thistle1"), 
+       cex=0.90)
+```
+
+Aqui podemos ressaltar dois pontos importantes. O primeiro é que a maioria absoluta dos que defendem as mídias como ferramenta usa as mesmas por pelo menos 1 hora ao dia (quase 95%!!) e que TODOS usam por meia hora ou mais. O segundo ponto é sobre os que não acreditam nas redes sociais como ferramenta: embora os tempos de consumo sejam distribuídos, metade não usa redes sociais por mais de 30 minutos no dia!
+
+
+```{r, echo=FALSE, warning=FALSE}
+all_nao = c(melhoraresul.nao.tempo.1,
+            melhoraresul.nao.tempo.2,
+            melhoraresul.nao.tempo.3,
+            melhoraresul.nao.tempo.4,
+            melhoraresul.nao.tempo.5,
+            melhoraresul.nao.tempo.6,
+            melhoraresul.nao.tempo.7,
+            melhoraresul.nao.tempo.8,
+            melhoraresul.nao.tempo.9)
+
+all_sim = c(melhoraresul.sim.tempo.1,
+            melhoraresul.sim.tempo.2,
+            melhoraresul.sim.tempo.3,
+            melhoraresul.sim.tempo.4,
+            melhoraresul.sim.tempo.5,
+            melhoraresul.sim.tempo.6,
+            melhoraresul.sim.tempo.7,
+            melhoraresul.sim.tempo.8,
+            melhoraresul.sim.tempo.9)
+
+all = data.frame(
+  all_sim = all_sim,
+  all_nao = all_nao,
+  stringsAsFactors=F
+)
+all_matrix = as.matrix(all)
+colnames(all_matrix) <- c("all_sim","all_nao")
+
+legenda_all = c("Nenhum",
+                "5 a 10 minutos",
+                "10 a 30 minutos",
+                "30 a 60 minutos",
+                "1 a 2 horas", 
+                "2 a 3 horas",
+                "3 a 4 horas",
+                "4 a 5 horas",
+                "> 5horas")
+```
+
+Para uma visão panorâmica da questão, apresentamos um terceiro gráfico, que segue abaixo:
+
+```{r, fig.align='center', echo=FALSE, fig.width=14, fig.height=8, out.width = '100%'}
+barplot(t(all[c('all_sim','all_nao')]), beside = TRUE,
+        cex.names=0.85,
+        xlab="Tempo gasto",
+        names.arg=legenda_all,
+        col=c("seagreen2","indianred1"),
+        ylim=c(0,12),
+        main="Você acredita nas mídias sociais como ferramentas para melhorar o aprendizado?")
+
+legend("topleft", inset=.015,
+       c("Sim","Não"), fill=c("seagreen2","indianred1"), text.font=2, cex=0.9)
+
+```
+
+No gráfico fica evidente tanto a grandeza da opinião positiva sobre a negativa, quanto a relação de que as opiniões postivas tendem a se concentrar nos entrevistados que passam mais tempo _online_. Dessa forma, verificamos que aqueles que tem mais "intimidade" com as redes tambem as vêm com potencial para o ensino.
+
+
+## Avaliação dos recursos das redes sociais para o uso na Educação
+O que costuma levar pessoas a utilizar determinadas redes sociais e manterem um certo hábito e continuidade no uso destas são os recursos que cada uma delas oferece. Seja na hora de compartilhar informações, ou de estabelecer contato, de armazenar conteúdo, e assim por diante. Quanto mais flexibilidade e opções a plataforma oferece, mais as pessoas se tornarão dependentes desses recursos.
+
+Na última sessão do questionário, foi questionada a avaliação dos recursos das mídias sociais na educação, classificando-os em Excelente, Bom, Indiferente, Pobre ou Muito pobre. 
+
+No gráfico, foram considerados os seguintes recursos:
+
+a. Envio de informações da escola para os pais.
+b. Um número crescente de instituições educacionais está usando mídias sociais por motivos promocionais.
+c. As escolas estão começando a usar grupos no Facebook para se comunicar com os alunos.
+d. Os membros dos grupos podem trocar arquivos, links, informações, pesquisas e vídeos rapidamente. Quando alguém contribui com o grupo, seus membros recebem uma notificação. Se for utilizado o aplicativo Facebook para smartphone, estas trocas são enviadas diretamente para o dispositivo móvel dos alunos.
+e. Estudantes e professores podem compartilhar informações entre si.
+f. O aplicativo “Pinterest" está se tornando popular como um "quadro virtual". O App permite compartilhar, carregar, classificar e gerenciar imagens, vídeos e outros conteúdos multimídia. É ótimo para compartilhar recursos da internet que os alunos acharem interessantes ou relevantes.
+
+
+```{r, echo=FALSE, warning=FALSE}
+envio_info_pais_txt <- "Recurso A"
+envio_info_pais <- data$evioinfo
+envio_info_pais_excelente <- sum(envio_info_pais == '1')
+envio_info_pais_bom <- sum(envio_info_pais == '2')
+envio_info_pais_indiferente <- sum(envio_info_pais == '3')
+envio_info_pais_ruim <- sum(envio_info_pais == '4')
+envio_info_pais_muitoruim <- sum(envio_info_pais == '5')
+envio_pais_max <- max(envio_info_pais_excelente)
+
+envio_info_pais_arr <- c(
+  envio_info_pais_excelente,
+  envio_info_pais_bom,
+  envio_info_pais_indiferente,
+  envio_info_pais_ruim,
+  envio_info_pais_muitoruim
+)
+
+motivos_promocionais_txt <- "Recurso B"#usando mídias sociais por motivos promocionais."
+motivos_promocionais <- data$grandeuso
+motivos_promocionais_excelente <- sum(motivos_promocionais == '1')
+motivos_promocionais_bom <- sum(motivos_promocionais == '2')
+motivos_promocionais_indiferente <- sum(motivos_promocionais == '3')
+motivos_promocionais_ruim <- sum(motivos_promocionais == '4')
+motivos_promocionais_muitoruim <- sum(motivos_promocionais == '5')
+
+motivos_promocionais_arr <- c(
+  motivos_promocionais_excelente,
+  motivos_promocionais_bom,
+  motivos_promocionais_indiferente,
+  motivos_promocionais_ruim,
+  motivos_promocionais_muitoruim
+)
+
+grupo_facebook_txt <- "Recurso C"#comunicar com os alunos."
+grupo_facebook <- data$facegrupo
+grupo_facebook_excelente <- sum(grupo_facebook == '1')
+grupo_facebook_bom <- sum(grupo_facebook == '2')
+grupo_facebook_indiferente <- sum(grupo_facebook == '3')
+grupo_facebook_ruim <- sum(grupo_facebook == '4')
+grupo_facebook_muitoruim <- sum(grupo_facebook == '5')
+
+grupo_facebook_arr <- c(
+  grupo_facebook_excelente,
+  grupo_facebook_bom,
+  grupo_facebook_indiferente,
+  grupo_facebook_ruim,
+  grupo_facebook_muitoruim
+)
+
+troca_infos_txt <- "Recurso D"#pesquisas e vídeos rapidamente. Quando alguém contribui com o grupo, seus membros recebem uma notificação. No Facebook para smartphone, estas trocas são enviadas diretamente para o dispositivo móvel dos alunos."
+troca_infos <- data$trocainfo
+troca_infos_excelente <- sum(troca_infos == '1')
+troca_infos_bom <- sum(troca_infos == '2')
+troca_infos_indiferente <- sum(troca_infos == '3')
+troca_infos_ruim <- sum(troca_infos == '4')
+troca_infos_muitoruim <- sum(troca_infos == '5')
+
+troca_infos_arr <- c(
+  troca_infos_excelente,
+  troca_infos_bom,
+  troca_infos_indiferente,
+  troca_infos_ruim,
+  troca_infos_muitoruim
+)
+
+compart_estud_profs_txt <- "Recurso E"#entre si."
+compart_estud_profs <- data$compinfopal
+compart_estud_profs_excelente <- sum(compart_estud_profs == '1')
+compart_estud_profs_bom <- sum(compart_estud_profs == '2')
+compart_estud_profs_indiferente <- sum(compart_estud_profs == '3')
+compart_estud_profs_ruim <- sum(compart_estud_profs == '4')
+compart_estud_profs_muitoruim <- sum(compart_estud_profs == '5')
+
+compart_estud_profs_arr <- c(
+  compart_estud_profs_excelente,
+  compart_estud_profs_bom,
+  compart_estud_profs_indiferente,
+  compart_estud_profs_ruim,
+  compart_estud_profs_muitoruim
+)
+
+pinterest_txt <- "Recurso F"#compartilhar, carregar, classificar e gerenciar imagens, vídeos e outros conteúdos multimídia. É ótimo para compartilhar recursos que os alunos acharem interessantes ou relevantes"
+pinterest <- data$quadrovirtual
+pinterest_excelente <- sum(pinterest == '1')
+pinterest_bom <- sum(pinterest == '2')
+pinterest_indiferente <- sum(pinterest == '3')
+pinterest_ruim <- sum(pinterest == '4')
+pinterest_muitoruim <- sum(pinterest == '5')
+
+pinterest_arr <- c(
+  pinterest_excelente,
+  pinterest_bom,
+  pinterest_indiferente,
+  pinterest_ruim,
+  pinterest_muitoruim
+)
+
+avaliacoes_recursos <- data.frame(
+  "Avaliações" = c('1', '2', '3', '4', '5'),
+  envio_info_pais_txt = envio_info_pais_arr,
+  motivos_promocionais_txt = motivos_promocionais_arr,
+  grupo_facebook_txt = grupo_facebook_arr,
+  troca_infos_txt = troca_infos_arr,
+  compart_estud_profs_txt = compart_estud_profs_arr,
+  pinterest_txt = pinterest_arr
+)
+
+recursos = c(
+  rep(envio_info_pais_txt, 5), 
+  rep(motivos_promocionais_txt, 5), 
+  rep(grupo_facebook_txt, 5),
+  rep(troca_infos_txt, 5), 
+  rep(compart_estud_profs_txt, 5), 
+  rep(pinterest_txt, 5)
+) # 5 avaliações
+
+avaliacoes = rep(c(
+  '1. Excelente', 
+  '2. Bom', 
+  '3. Indiferente',
+  '4. Pobre',
+  '5. Muito pobre'
+), 6) # 6 recursos
+
+valores = c(
+  envio_info_pais_arr, motivos_promocionais_arr, grupo_facebook_arr,
+  troca_infos_arr, compart_estud_profs_arr, pinterest_arr
+)
+valores[is.na(valores)] <- 0
+
+dados = data.frame(recursos, avaliacoes, valores)
+
+```
+
+```{r, echo=FALSE, fig.align='center', out.width = '60%'}
+ggplot(dados, aes(fill=avaliacoes, y=valores, x=recursos)) +
+  geom_bar(stat="identity") + labs(x = "Recursos", y = "Quantidades", fill = "Avaliações") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Observando o gráfico que contabiliza as respostas, podemos observar que na média os recursos foram considerados bons.
+
+O recurso que foi melhor avaliado, obtendo o maior número de “Excelente” e nenhum “Pobre” ou “Muito pobre”, foi do aplicativo Facebook que disponibiliza a ferramenta de criação de grupos para compartilhamento de informações que são notificadas aos participantes. Na sequência, o recurso que compreende a troca de informações entre alunos e professores.
+
+A troca de informações escolares com os pais, bem como o número crescente de instituições estarem utilizando as plataformas sociais como meios de promoção, foram os recursos que mais obtiveram classificações ruins, com os maiores números de “Muito pobre”.
+
+Sobre o recurso do aplicativo Pinterest, foi o que mais obteve a classificação “Indiferente”, sendo inclusive o maior número dentre as categorias em que foi avaliado. 
+
+O recurso que diz respeito à promoção de instituições escolares, apesar de obter classificações ruins, foi o segundo colocado nesta mesma classificação.
+
+
+## Plataformas mais utilizadas dentre os que julgam alcançarem melhores resultados se houver integração entre mídias sociais e graduação
+
+A fim de melhor utilização dos resultados da pesquisa e facilitação das possíveis ações dos docentes, realizamos a mesclagem dos dados obtidos pelas perguntas 1 e 6 para identificar a rede social mais utilizada dentre os que consideram melhoria em seus resultados com a integração dos estudos e redes sociais.
+
+
+```{r, echo=FALSE, warning=FALSE}
+#criando um arquivo estruturado com ID para as linhas
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+#write.csv(agrupa, "dados/structured_csv.csv",row.names=FALSE)
+
+#excluindo os individuos que nao responderam sim para a pergunta 6
+vetor_exclusao <- c()
+id<-1
+for(resp in agrupa$melhoraresul){
+  if(resp != '2'){
+    vetor_exclusao <- c(vetor_exclusao,id)
+  }
+  id<-id+1
+}
+
+agrupa <- agrupa[-c(vetor_exclusao), ]
+data <- agrupa
+
+#criando o gráfico
+coluna_facebook <- sum(data$facebook)
+coluna_twitter <- sum(data$twitter)
+coluna_whatsapp <- sum(data$whatsapp)
+coluna_linkedin <- sum(data$linkedin)
+coluna_youtube <- sum(data$youtube)
+coluna_instagram <- sum(data$instagram)
+coluna_snapchat <- sum(data$snapchat)
+coluna_tumblr <- sum(data$tumblr)
+coluna_pinterest <- sum(data$pinterest)
+outras_plataf <- 0
+for (i in data$outras_plataformas){
+  if(!is.na(i)){
+    outras_plataf <- outras_plataf+1
+  }
+}
+
+coluna_outras <- outras_plataf
+
+#formatando para criar gráfico
+dados <- c(coluna_facebook, coluna_twitter, coluna_whatsapp, coluna_linkedin, coluna_youtube, 
+           coluna_instagram, coluna_snapchat, coluna_tumblr, coluna_pinterest, coluna_outras)
+
+legenda <- c("Facebook", "Twitter", "WhatsApp", "Linkedin", "YouTube", "Instagram", "Snapchat", "Tumblr", "Pinterest", "Outras")
+
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+
+```
+
+```{r, echo=FALSE, fig.align='center', out.width = '60%'}
+barplot(dados, main="Plataformas mais usadas por aqueles \nque consideram que terão melhores resultados com \na integração de mídias sociais com aulas/atividades", col = rainbow(30), horiz=TRUE,
+        width = 500, xlim = c(0,40),cex.names=0.8,
+        xlab="Qtde de usuários por plataforma",
+        las=1,
+        names.arg=legenda, space=1)
+```
+
+Observa-se no gráfico acima que a plataforma mais utilizada continua sendo o WhatsApp, mesmo resultado obtido considerando todos os envolvidos na pesquisa.
+Em segundo lugar, manteve-se o YouTube, mas com uma diferença menor do terceiro andar, que é novamente o Facebook.
+
+Desta forma, indica-se o WhatsApp como principal ferramenta de compartilhamento de conteúdo entre discentes e docentes da Unesp de Bauru.
+
+## Utilização do linkedin pelos discentes
+Uma das principais abordagens durante o período da universidade é a procura da primeira experiência de trabalho. Para tanto, nos questionamos com base nos dados como os alunos estão utilizando plataformas de vínculo profissional, como o linkedin.
+
+Importante salientar que as pessoas com vínculos remunerados totalizam 37 e, em contrapartida, 24 estão desempregadas. Isso representa que 60,65% dos entrevistados possuem remuneração.
+
+```{r, echo=FALSE, warning=FALSE}
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+path <- "/Users/joaopedroalbino/Desktop/Projetos R/Grupo-1"
+path <- paste(path, "/dados/structured_csv.csv", sep = "")
+#write.csv(agrupa, path,row.names=FALSE)
+
+#atribuindo os valores da coluna genero
+coluna_linkedin <- data$'linkedin'
+coluna_emprego <- data$'trabalha'
+
+usam <- sum(coluna_linkedin == '1')
+nao_usam <- sum(coluna_linkedin == '0')
+
+# % Pessoas Utilizam Linkedin
+dados <- c(usam, nao_usam)
+legenda <- c("Usam LinkedIn", "Não utilizam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.align='center', out.width = '50%'}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="LinkedIn")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+data$ID <- seq.int(nrow(data))
+agrupa <- as.data.frame(list(data$ID, data))
+names(agrupa)[1] <- "ID"
+#write.csv(agrupa, "dados/structured_csv.csv",row.names=FALSE)
+
+esta_lin <- subset(agrupa, agrupa$trabalha == 4, select = c(ID, linkedin))
+usam_e_est <- sum(esta_lin$linkedin == '1')
+nao_usam_e_estag <- sum(esta_lin$linkedin == '0')
+
+dados <- c(usam_e_est, nao_usam_e_estag)
+legenda <- c("Usam LinkedIn e estagiam", "Não usam linkedin e estagiam")
+qtd <- length(legenda)
+pct <- round(dados/sum(dados)*100)
+legenda <- paste(legenda, pct)
+legenda <- paste(legenda,"%",sep="")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.align='center', out.width = '50%'}
+pie(dados,labels = legenda, col=cor(qtd),
+    main="Estagiários que usam LinkedIn")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+#seleciona onde são desempregados e utilizam ou não a plataforma
+desempregados_linkedin <- subset(agrupa, agrupa$trabalha == 1, select = c(ID, linkedin))
+usam_e_desem <- sum(desempregados_linkedin$linkedin == '1')
+nao_usam_e_desempregado <- sum(desempregados_linkedin$linkedin == '0')
+
+#seleciona onde são empregados e utilizam ou não a plataforma
+empregado_linkedin <- subset(agrupa, agrupa$trabalha == 2 | agrupa$trabalha == 3 | agrupa$trabalha == 4 | agrupa$trabalha == 5 | agrupa$trabalha == 8, select = c(ID, linkedin))
+usam_e_em <- sum(empregado_linkedin$linkedin == '1')
+nao_usam_e_empregado <- sum(empregado_linkedin$linkedin == '0')
+```
+
+De acordo com o gráfico, podemos verificar uma estatística interessante sobre os dados: a maioria dos alunos utiliza o linkedin, o que é relavante tendo em vista que a maioria dos alunos já possuem remunureção.
+
+Porém, gostaríamos de saber também, em relação aos alunos sem remuneração, quantos utilizam. E nesse ponto algo foi surpreendente. 14 dos 24 não remunerados, não utilizam a plataforma, logo uma premissa que pode ser refutada é de que a maioria das pessoas utilizam o linkedin à procura de vagas ou algo parecido.
+
+# Conclusão
+Dentro do trabalho, procuramos elucidar um pouco sobre o perfil dos discentes dos cursos da UNESP Bauru. Analisamos a amostra populacional, bem como sua utilização das mídias sociais. Por fim, procuramos trazer pontos, às vezes, ocultos sobre os meios de comunicação para que os mesmos pudessem ser discutidos.
+
+Doravante, é importante salientar que muito pode ser feito em relação à essas análises. Seria interessante aplicar e discutí-las com o próprio corpo docente da instituição, podendo ocorrer diversos avanços na instituição fruto de uma construção conjunta entre corpo discente e docente.
+
+Por fim, uma sugestão para próximas pesquisas seria ampliar a amostra populacional da análise, o que poderia enriquecer e fomentar discussões lúdicas sobre o ensino na universidade.
